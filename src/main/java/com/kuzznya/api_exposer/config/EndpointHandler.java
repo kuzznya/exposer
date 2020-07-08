@@ -31,7 +31,7 @@ public class EndpointHandler {
         for (Parameter param : methodParams) {
             Object arg;
             if (requestParams.get(param.getName()).size() == 1)
-                arg =  requestParams.getFirst(param.getName());
+                arg = requestParams.getFirst(param.getName());
             else
                 arg = requestParams.get(param.getName());
             args.add(param.getType().cast(arg));
