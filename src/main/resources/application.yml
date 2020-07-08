@@ -1,0 +1,11 @@
+exposer:
+  routes:
+    - path: /test
+      method: GET
+      class-method: testService::getValue
+    - path: /test
+      method: POST
+      class-method: testService::setValue
+    - path: /test2
+      method: GET
+      class-method: testService::setValue
