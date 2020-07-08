@@ -1,7 +1,6 @@
 package com.kuzznya.api_exposer.config;
 
 import com.kuzznya.api_exposer.model.ExposerProperties;
-import com.kuzznya.api_exposer.model.RequestParam;
 import com.kuzznya.api_exposer.model.Route;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
