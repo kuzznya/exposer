@@ -1,11 +1,45 @@
 exposer:
+  bean: TestService2
   routes:
     - path: /test
-      method: GET
-      class-method: testService::getValue
-    - path: /test
-      method: POST
-      class-method: testService::setValue
-    - path: /test2
-      method: GET
-      class-method: testService::setValue
+#      bean: TestService
+      routes:
+        - path: /v1
+          bean: TestService
+          endpoints:
+            - http-method: GET
+              bean-method: getValue
+            - http-method: POST
+              bean-method: setValue
+        - path: /v2
+          bean: TestService
+          endpoints:
+            - http-method: GET
+              bean-method: setValue
+      endpoints:
+        - http-method: GET
+          bean-method: someFun
+
+# # The goal is to have such config:
+#
+#exposer2:
+#  routes:
+#    - path: /test
+#      bean: TestService
+#      routes:
+#        - path: /v1
+#          endpoints:
+#            - http-method: GET
+#              bean-method: getValue
+#        - path: /v2
+#          endpoints:
+#            - http-method: POST
+#              bean: TestService2
+#              bean-method: setValueTest
+#              args:
+#                val: params.value
+#      endpoints:
+#        - http-method: POST
+#          bean-method: setValue
+#          args:
+#            val: $params.value

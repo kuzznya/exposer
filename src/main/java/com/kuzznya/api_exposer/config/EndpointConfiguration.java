@@ -1,7 +1,7 @@
 package com.kuzznya.api_exposer.config;
 
+import com.kuzznya.api_exposer.model.Endpoint;
 import com.kuzznya.api_exposer.model.ExposerProperties;
-import com.kuzznya.api_exposer.model.Route;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
@@ -32,9 +32,10 @@ public class EndpointConfiguration {
 
     @PostConstruct
     public void init() throws NoSuchMethodException {
-        for (Route route : properties.getRoutes()) {
-            String beanName = route.getClassMethod().split("::")[0];
-            String methodName = route.getClassMethod().split("::")[1];
+        for (Endpoint endpoint : properties.getEndpoints()) {
+            String beanName = endpoint.getBeanName();
+            beanName = Character.toLowerCase(beanName.charAt(0)) + beanName.substring(1);
+            String methodName = endpoint.getBeanMethod();
 
             Object service = context.getBean(beanName);
             Method serviceMethod = List.of(service.getClass().getDeclaredMethods())
@@ -47,11 +48,10 @@ public class EndpointConfiguration {
 
             EndpointHandler handler = new EndpointHandler(service, serviceMethod);
 
-
             handlerMapping.registerMapping(
                     RequestMappingInfo
-                            .paths(route.getPath())
-                            .methods(route.getMethod())
+                            .paths(endpoint.getPath())
+                            .methods(endpoint.getHttpMethod())
                             .params(
                                     Arrays.stream(serviceMethod.getParameters())
                                             .map(Parameter::getName)
