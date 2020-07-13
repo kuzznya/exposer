@@ -16,9 +16,14 @@ exposer:
           endpoints:
             - http-method: GET
               bean-method: setValue
+              params:
+                value: ?val
       endpoints:
         - http-method: GET
-          bean-method: someFun
+          bean-method: joinTwoArgs
+          params:
+            arg1: ?val
+            arg2: tst
 
 # # The goal is to have such config:
 #
@@ -43,3 +48,15 @@ exposer:
 #          bean-method: setValue
 #          args:
 #            val: $params.value
+#
+# # Or this:
+#exposer2:
+#  class: bean:TestService2
+#  routes:
+#    - path: /test
+#      endpoints:
+#        - http-method: GET
+#          class: com.kuzznya.api_exposer.service.TestService
+#          class-method: setValue
+#
+# to enable use with non-Spring annotated classes

@@ -11,7 +11,6 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Arrays;
@@ -46,21 +45,23 @@ public class EndpointConfiguration {
 
             serviceMethod.setAccessible(true);
 
-            EndpointHandler handler = new EndpointHandler(service, serviceMethod);
+            EndpointHandler handler = new EndpointHandler(service, serviceMethod, endpoint.getParamsMapping());
 
             handlerMapping.registerMapping(
                     RequestMappingInfo
                             .paths(endpoint.getPath())
                             .methods(endpoint.getHttpMethod())
                             .params(
-                                    Arrays.stream(serviceMethod.getParameters())
-                                            .map(Parameter::getName)
-                                            .toArray(String[]::new)
+                                    endpoint.getParamsMapping() != null ?
+                                            endpoint.getRequestParams().toArray(String[]::new) :
+                                            Arrays.stream(serviceMethod.getParameters())
+                                                    .map(Parameter::getName)
+                                                    .toArray(String[]::new)
                             )
                             .produces(MediaType.APPLICATION_JSON_VALUE)
                             .build(),
                     handler,
-                    EndpointHandler.class.getDeclaredMethod("handle", MultiValueMap.class, HttpServletRequest.class)
+                    EndpointHandler.class.getDeclaredMethod("handle", MultiValueMap.class)
             );
         }
     }
