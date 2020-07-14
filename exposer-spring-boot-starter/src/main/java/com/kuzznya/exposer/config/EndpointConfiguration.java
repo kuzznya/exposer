@@ -2,11 +2,13 @@ package com.kuzznya.exposer.config;
 
 import com.kuzznya.exposer.model.Endpoint;
 import com.kuzznya.exposer.model.ExposerProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
@@ -17,7 +19,9 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
+@ConditionalOnWebApplication
 @EnableConfigurationProperties(ExposerProperties.class)
+@EnableWebMvc
 public class EndpointConfiguration {
     private final RequestMappingHandlerMapping handlerMapping;
     private final ExposerProperties properties;

@@ -1,0 +1,9 @@
+exposer:
+  bean: ApiExposerApplicationTests
+  routes:
+    - path: /test
+      endpoints:
+        - http-method: GET
+          bean-method: testMethod
+          args:
+            value: ?val

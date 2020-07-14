@@ -1,4 +1,4 @@
-package com.kuzznya.exposer.service;
+package com.kuzznya.exposer_sample.service;
 
 import org.springframework.stereotype.Service;
 
