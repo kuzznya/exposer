@@ -20,6 +20,6 @@ public class EndpointProperty {
     private Map<String, String> params;
 
     public Endpoint getEndpoint(@NonNull String path, @NonNull String beanName) {
-        return new Endpoint(path, httpMethod, beanName, beanMethod, params);
+        return new Endpoint(path, httpMethod, bean != null ? bean : beanName, beanMethod, params);
     }
 }
