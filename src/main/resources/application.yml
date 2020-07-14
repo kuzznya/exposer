@@ -25,38 +25,3 @@ exposer:
             arg1: ?val
             arg2: tst
 
-# # The goal is to have such config:
-#
-#exposer2:
-#  routes:
-#    - path: /test
-#      bean: TestService
-#      routes:
-#        - path: /v1
-#          endpoints:
-#            - http-method: GET
-#              bean-method: getValue
-#        - path: /v2
-#          endpoints:
-#            - http-method: POST
-#              bean: TestService2
-#              bean-method: setValueTest
-#              args:
-#                val: params.value
-#      endpoints:
-#        - http-method: POST
-#          bean-method: setValue
-#          args:
-#            val: $params.value
-#
-# # Or this:
-#exposer2:
-#  class: bean:TestService2
-#  routes:
-#    - path: /test
-#      endpoints:
-#        - http-method: GET
-#          class: com.kuzznya.api_exposer.service.TestService
-#          class-method: setValue
-#
-# to enable use with non-Spring annotated classes
