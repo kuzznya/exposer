@@ -1,0 +1,28 @@
+exposer:
+  bean: TestService2
+  routes:
+    - path: /test
+      #      bean: TestService
+      routes:
+        - path: /v1
+          bean: TestService
+          endpoints:
+            - http-method: GET
+              bean-method: getValue
+            - http-method: POST
+              bean-method: setValue
+        - path: /v2
+          bean: TestService
+          endpoints:
+            - http-method: GET
+              bean-method: setValue
+              params:
+                value: ?val
+      endpoints:
+        - http-method: GET
+          bean-method: joinTwoArgs
+          params:
+            arg1: ?val
+            arg2: tst
+
+
