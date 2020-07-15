@@ -1,8 +1,12 @@
-package com.github.kuzznya.exposer.model;
+package com.github.kuzznya.exposer.core.config;
 
+import com.github.kuzznya.exposer.core.model.Endpoint;
+import com.github.kuzznya.exposer.core.model.EndpointProperty;
+import com.github.kuzznya.exposer.core.model.RouteProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -10,12 +14,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@ConfigurationProperties(prefix = "exposer")
 @Data
-public class ExposerProperties {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ExposerConfiguration {
     private List<RouteProperty> routes = Collections.emptyList();
     private List<EndpointProperty> endpoints = Collections.emptyList();
     private String bean;
+
 
     public List<Endpoint> getEndpoints() {
         return Stream.concat(

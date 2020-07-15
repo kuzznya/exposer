@@ -1,9 +1,7 @@
-package com.github.kuzznya.exposer.config;
+package com.github.kuzznya.exposer.core.config;
 
-import com.github.kuzznya.exposer.model.Endpoint;
-import com.github.kuzznya.exposer.model.ExposerProperties;
+import com.github.kuzznya.exposer.core.model.Endpoint;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -20,22 +18,21 @@ import java.util.List;
 
 @Configuration
 @ConditionalOnWebApplication
-@EnableConfigurationProperties(ExposerProperties.class)
 @EnableWebMvc
 public class EndpointConfiguration {
     private final RequestMappingHandlerMapping handlerMapping;
-    private final ExposerProperties properties;
+    private final ExposerConfiguration exposerConfiguration;
     private final ApplicationContext context;
 
-    public EndpointConfiguration(RequestMappingHandlerMapping handlerMapping, ExposerProperties properties, ApplicationContext context) {
+    public EndpointConfiguration(RequestMappingHandlerMapping handlerMapping, ExposerConfiguration exposerConfiguration, ApplicationContext context) {
         this.handlerMapping = handlerMapping;
-        this.properties = properties;
+        this.exposerConfiguration = exposerConfiguration;
         this.context = context;
     }
 
     @PostConstruct
-    public void init() throws NoSuchMethodException {
-        for (Endpoint endpoint : properties.getEndpoints()) {
+    public void setUpEndpoints() throws NoSuchMethodException {
+        for (Endpoint endpoint : exposerConfiguration.getEndpoints()) {
             String beanName = endpoint.getBeanName();
             beanName = Character.toLowerCase(beanName.charAt(0)) + beanName.substring(1);
             String methodName = endpoint.getBeanMethod();

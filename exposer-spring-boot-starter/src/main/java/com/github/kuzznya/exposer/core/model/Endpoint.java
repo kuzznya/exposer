@@ -1,4 +1,4 @@
-package com.github.kuzznya.exposer.model;
+package com.github.kuzznya.exposer.core.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
