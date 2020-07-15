@@ -1,7 +1,7 @@
-package com.kuzznya.exposer.config;
+package com.github.kuzznya.exposer.config;
 
-import com.kuzznya.exposer.model.Endpoint;
-import com.kuzznya.exposer.model.ExposerProperties;
+import com.github.kuzznya.exposer.model.Endpoint;
+import com.github.kuzznya.exposer.model.ExposerProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;

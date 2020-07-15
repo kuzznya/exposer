@@ -1,4 +1,4 @@
-package com.kuzznya.exposer.config;
+package com.github.kuzznya.exposer.config;
 
 import lombok.NonNull;
 import org.springframework.http.HttpStatus;

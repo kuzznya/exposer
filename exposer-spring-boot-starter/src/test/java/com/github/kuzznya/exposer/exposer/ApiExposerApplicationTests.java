@@ -1,4 +1,4 @@
-package com.kuzznya.exposer;
+package com.github.kuzznya.exposer.exposer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringBootConfiguration;

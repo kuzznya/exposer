@@ -1,11 +1,12 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'signing'
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 }
 
-group = 'com.kuzznya'
+group = 'com.github.kuzznya'
 version = '0.0.1'
 sourceCompatibility = '11'
 
@@ -17,26 +18,6 @@ configurations {
 
 repositories {
     mavenCentral()
-}
-
-bootJar {
-    enabled=false
-}
-
-jar {
-    enabled=true
-}
-
-publishing {
-    publications {
-        exposer(MavenPublication) {
-            artifact jar
-        }
-    }
-
-    repositories {
-        mavenLocal()
-    }
 }
 
 dependencies {
@@ -57,3 +38,83 @@ test {
 }
 
 compileJava.dependsOn(processResources)
+
+bootJar {
+    enabled=false
+}
+
+jar {
+    enabled=true
+}
+
+task sourceJar(type: Jar, dependsOn: classes) {
+    classifier "sources"
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives jar
+    archives sourceJar
+    archives javadocJar
+}
+
+signing {
+    useGpgCmd()
+    sign(publishing.publications)
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                name = 'API Exposer'
+                description = 'API bootstrap creator without controllers'
+                packaging = 'jar'
+                url = 'https://github.com/kuzznya/exposer/'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://github.com/kuzznya/exposer/blob/master/LICENSE'
+                        distribution = 'repo'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'kuzznya'
+                        name = 'Ilya Kuznetsov'
+                        email = 'kuzznya@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/kuzznya/exposer.git'
+                    developerConnection = 'scm:git:ssh://git@github.com:kuzznya/exposer.git'
+                    url = 'https://github.com/kuzznya/exposer'
+                }
+                issueManagement {
+                    system = 'GitHub'
+                    url = 'https://github.com/kuzznya/exposer/issues'
+                }
+            }
+
+            artifact jar
+            artifact sourceJar
+            artifact javadocJar
+        }
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral {
+            url 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+            credentials {
+                username sonatypeUsername
+                password sonatypePassword
+            }
+        }
+    }
+}

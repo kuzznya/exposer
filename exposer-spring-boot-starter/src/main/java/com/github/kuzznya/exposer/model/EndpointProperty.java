@@ -1,4 +1,4 @@
-package com.kuzznya.exposer.model;
+package com.github.kuzznya.exposer.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

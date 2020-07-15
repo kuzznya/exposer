@@ -1,6 +1,6 @@
-package com.kuzznya.exposer;
+package com.github.kuzznya.exposer;
 
-import com.kuzznya.exposer.config.EndpointConfiguration;
+import com.github.kuzznya.exposer.config.EndpointConfiguration;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.ElementType;
