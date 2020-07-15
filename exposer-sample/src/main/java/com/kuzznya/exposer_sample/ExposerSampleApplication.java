@@ -1,6 +1,6 @@
 package com.kuzznya.exposer_sample;
 
-import com.kuzznya.exposer.EnableExposer;
+import com.github.kuzznya.exposer.EnableExposer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
