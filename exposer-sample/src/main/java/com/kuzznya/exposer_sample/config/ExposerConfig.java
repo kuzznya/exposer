@@ -21,9 +21,13 @@ public class ExposerConfig {
                         .endpoint(RequestMethod.POST, "setValue").register()
                     .and()
                     .route("/v2")
-                        .endpoint(RequestMethod.GET, "setValue").bean("TestService").param("value", "?val").register()
+                        .endpoint(RequestMethod.GET, "setValue")
+                            .bean("TestService").param("value", "?val")
+                            .register()
                     .and()
-                    .endpoint(RequestMethod.GET, "joinTwoArgs").param("arg1", "?val").param("arg2", "tst").register()
+                    .endpoint(RequestMethod.GET, "joinTwoArgs")
+                        .param("arg1", "?val").param("arg2", "tst")
+                        .register()
                     .add()
                 .configure();
     }

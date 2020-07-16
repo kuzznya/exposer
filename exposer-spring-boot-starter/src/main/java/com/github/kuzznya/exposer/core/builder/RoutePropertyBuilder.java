@@ -2,7 +2,8 @@ package com.github.kuzznya.exposer.core.builder;
 
 import com.github.kuzznya.exposer.core.model.RouteProperty;
 
-public class RoutePropertyBuilder<ParentBuilderClass extends RouteBuilder<?>> extends RouteBuilder<RoutePropertyBuilder<ParentBuilderClass>> {
+public class RoutePropertyBuilder<ParentBuilderClass extends RouteBuilder<?>>
+        extends RouteBuilder<RoutePropertyBuilder<ParentBuilderClass>> {
     private final ParentBuilderClass parentBuilder;
 
     private final String path;
