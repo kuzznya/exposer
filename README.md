@@ -19,7 +19,7 @@ with Maven:
     <dependency>
         <groupId>com.github.kuzznya</groupId>
         <artifactId>exposer</artifactId>
-        <version>0.0.1</version>
+        <version>1.0.0</version>
     </dependency>
     
     <dependency>
@@ -33,7 +33,7 @@ with Maven:
 
 with Gradle:
 ```groovy
-implementation 'com.github.kuzznya:exposer-spring-boot-starter:0.0.1'
+implementation 'com.github.kuzznya:exposer-spring-boot-starter:1.0.0'
 implementation 'org.springframework.boot:spring-boot-starter-web'
 ```
 
