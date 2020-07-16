@@ -7,7 +7,7 @@ plugins {
 }
 
 group = 'com.github.kuzznya'
-version = '0.0.2'
+version = '1.0.0'
 sourceCompatibility = '11'
 
 configurations {
