@@ -1,7 +1,7 @@
 package com.github.kuzznya.exposer.autoconfigure.config;
 
-import com.github.kuzznya.exposer.core.config.ExposerConfiguration;
 import com.github.kuzznya.exposer.autoconfigure.model.ExposerProperties;
+import com.github.kuzznya.exposer.core.config.ExposerConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

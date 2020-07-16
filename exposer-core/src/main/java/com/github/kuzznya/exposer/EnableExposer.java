@@ -1,6 +1,5 @@
 package com.github.kuzznya.exposer;
 
-import com.github.kuzznya.exposer.autoconfigure.config.ExposerAutoConfiguration;
 import com.github.kuzznya.exposer.core.config.EndpointConfiguration;
 import org.springframework.context.annotation.Import;
 
@@ -11,5 +10,5 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@Import({EndpointConfiguration.class, ExposerAutoConfiguration.class})
+@Import(EndpointConfiguration.class)
 public @interface EnableExposer { }
