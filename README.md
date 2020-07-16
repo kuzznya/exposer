@@ -55,11 +55,13 @@ public class ExposerSampleApplication {
 }
 ```
 
-3. Configure your API endpoints in `application.yml` 
-or `application.properties` config file
-(configuring through YAML file is much more simple) - see next section
+3. Configure your API endpoints - see next section
 
 ## Configuration
+
+There are two types of configuration
+
+#### 1. Through config file
 
 **Subroute config:**
 
@@ -178,12 +180,41 @@ exposer.routes[0].endpoints[0].params.arg1=?val
 exposer.routes[0].endpoints[0].params.arg2=tst
 ```
 
+### 2. Through code with bean creation
+
+```java
+@Configuration
+public class ExposerConfig {
+    @Bean
+    ExposerConfiguration exposerConfiguration() {
+        return ExposerConfiguration.builder()
+                .bean("TestService2")
+                .route("/test")
+                    .route("/v1")
+                        .bean("TestService")
+                        .endpoint(RequestMethod.GET, "getValue").and()
+                        .endpoint(RequestMethod.POST, "setValue").register()
+                    .and()
+                    .route("/v2")
+                        .endpoint(RequestMethod.GET, "setValue")
+                            .bean("TestService").param("value", "?val")
+                            .register()
+                    .and()
+                    .endpoint(RequestMethod.GET, "joinTwoArgs")
+                        .param("arg1", "?val").param("arg2", "tst")
+                        .register()
+                    .add()
+                .configure();
+    }
+}
+```
+
 ## Sample project
 
 See [exposer-sample](./exposer-sample) project in this repository
 
-Both sample `application.yml` & `application.properties` belong to this project
-(but defined for corresponding Spring profiles `yml` & `prop`)
+Sample config code, `application.yml` & `application.properties` belong to this project
+(but defined for corresponding Spring profiles `code`, `yml` & `prop`)
 
 ## License
 
