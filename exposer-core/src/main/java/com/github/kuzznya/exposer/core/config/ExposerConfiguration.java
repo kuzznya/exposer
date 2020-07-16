@@ -4,7 +4,8 @@ import com.github.kuzznya.exposer.core.builder.ExposerConfigurationBuilder;
 import com.github.kuzznya.exposer.core.model.Endpoint;
 import com.github.kuzznya.exposer.core.model.EndpointProperty;
 import com.github.kuzznya.exposer.core.model.RouteProperty;
-import lombok.*;
+import lombok.NonNull;
+import lombok.Value;
 
 import java.util.Collection;
 import java.util.List;

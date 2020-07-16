@@ -1,9 +1,9 @@
 package com.github.kuzznya.exposer.core.config;
 
 import com.github.kuzznya.exposer.core.model.Endpoint;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-@ConditionalOnWebApplication
+@Import(ExposerConfiguration.class)
 @EnableWebMvc
 public class EndpointConfiguration {
     private final RequestMappingHandlerMapping handlerMapping;

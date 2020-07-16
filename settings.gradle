@@ -1,3 +1,5 @@
 rootProject.name = "exposer"
 
-include "exposer-spring-boot-starter", "exposer-sample"
+include 'exposer-spring-boot-starter'
+include 'exposer-core'
+include 'exposer-sample'
