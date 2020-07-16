@@ -1,26 +1,22 @@
 package com.github.kuzznya.exposer.core.config;
 
+import com.github.kuzznya.exposer.core.builder.ExposerConfigurationBuilder;
 import com.github.kuzznya.exposer.core.model.Endpoint;
 import com.github.kuzznya.exposer.core.model.EndpointProperty;
 import com.github.kuzznya.exposer.core.model.RouteProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Value
 public class ExposerConfiguration {
-    private List<RouteProperty> routes = Collections.emptyList();
-    private List<EndpointProperty> endpoints = Collections.emptyList();
-    private String bean;
+    List<RouteProperty> routes;
+    List<EndpointProperty> endpoints;
+    String bean;
 
 
     public List<Endpoint> getEndpoints() {
@@ -45,7 +41,7 @@ public class ExposerConfiguration {
                         .map(route -> getEndpoints(
                                 route,
                                 joinPath(parentPath, route.getPath()),
-                                route.getBean() != null ? route.getBean() : beanName
+                                Optional.ofNullable(route.getBean()).orElse(beanName)
                                 )
                         )
                         .flatMap(Collection::stream)
@@ -54,13 +50,13 @@ public class ExposerConfiguration {
 
     private List<Endpoint> constructEndpoints(List<EndpointProperty> properties,
                                               @NonNull String parentPath,
-                                              @NonNull String beanName) {
+                                              String beanName) {
         return properties
                 .stream()
                 .map(endpointProperty ->
                         endpointProperty.getEndpoint(
                                 parentPath,
-                                endpointProperty.getBean() != null ? endpointProperty.getBean() : beanName
+                                Optional.ofNullable(endpointProperty.getBean()).orElse(beanName)
                         )
                 ).collect(Collectors.toList());
     }
@@ -75,5 +71,9 @@ public class ExposerConfiguration {
             return parentPath + "/" + childPath;
         else
             return parentPath + childPath;
+    }
+
+    public static ExposerConfigurationBuilder builder() {
+        return new ExposerConfigurationBuilder();
     }
 }

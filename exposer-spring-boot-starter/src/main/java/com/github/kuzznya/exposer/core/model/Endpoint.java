@@ -1,27 +1,25 @@
 package com.github.kuzznya.exposer.core.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NonNull;
+import lombok.Value;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Data
-@AllArgsConstructor
+@Value
 public class Endpoint {
     @NonNull
-    private String path;
+    String path;
     @NonNull
-    private RequestMethod httpMethod;
+    RequestMethod httpMethod;
     @NonNull
-    private String beanName;
+    String beanName;
     @NonNull
-    private String beanMethod;
+    String beanMethod;
 
-    private Map<String, String> paramsMapping;
+    Map<String, String> paramsMapping;
 
     public List<String> getRequestParams() {
         return paramsMapping.values()

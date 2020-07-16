@@ -7,6 +7,7 @@ import lombok.NonNull;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Data
 @NoArgsConstructor
@@ -21,7 +22,7 @@ public class EndpointProperty {
 
     private Map<String, String> params;
 
-    public Endpoint getEndpoint(@NonNull String path, @NonNull String beanName) {
-        return new Endpoint(path, httpMethod, bean != null ? bean : beanName, beanMethod, params);
+    public Endpoint getEndpoint(@NonNull String path, String beanName) {
+        return new Endpoint(path, httpMethod, Optional.ofNullable(bean).orElse(beanName), beanMethod, params);
     }
 }
