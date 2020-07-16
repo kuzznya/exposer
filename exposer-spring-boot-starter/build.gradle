@@ -43,6 +43,7 @@ bootJar {
 
 jar {
     enabled=true
+    dependsOn(test)
 }
 
 task sourceJar(type: Jar, dependsOn: classes) {
