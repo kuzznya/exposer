@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'java-library'
     id 'maven-publish'
     id 'signing'
     id 'org.springframework.boot' version '2.3.1.RELEASE'
@@ -7,7 +8,7 @@ plugins {
 }
 
 group = 'com.github.kuzznya'
-version = '1.1.0-SNAPSHOT'
+version = '1.1.0'
 sourceCompatibility = '11'
 
 configurations {
@@ -22,9 +23,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.kuzznya:exposer-core:1.1.0-SNAPSHOT'
-    implementation 'com.github.kuzznya:exposer-spring-boot-autoconfigure:1.1.0-SNAPSHOT'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    api 'com.github.kuzznya:exposer-core:1.1.0'
+    api 'com.github.kuzznya:exposer-spring-boot-autoconfigure:1.1.0'
+    api 'org.springframework.boot:spring-boot-starter-web'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }

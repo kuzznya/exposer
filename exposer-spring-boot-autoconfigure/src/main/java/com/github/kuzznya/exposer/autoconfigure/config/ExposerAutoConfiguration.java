@@ -14,29 +14,25 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnClass(ExposerConfiguration.class)
+@ConditionalOnWebApplication
 @AutoConfigureAfter(WebMvcAutoConfiguration.class)
-public class ExposerAutoConfiguration {
+@EnableConfigurationProperties(ExposerProperties.class)
+@ConditionalOnMissingBean(value = ExposerConfigurer.class)
+@EnableWebMvc
+public class ExposerAutoConfiguration implements ExposerConfigurer {
 
-    @Configuration
-    @EnableWebMvc
-    @ConditionalOnWebApplication
-    @EnableConfigurationProperties(ExposerProperties.class)
-    @ConditionalOnMissingBean(value = ExposerConfigurer.class)
-    protected static class ExposerAutoConfigurer implements ExposerConfigurer {
+    private final ExposerProperties properties;
 
-        private final ExposerProperties properties;
+    public ExposerAutoConfiguration(ExposerProperties properties) {
+        this.properties = properties;
+    }
 
-        public ExposerAutoConfigurer(ExposerProperties properties) {
-            this.properties = properties;
-        }
-
-        @Override
-        public ExposerConfiguration configureExposer() {
-            return new ExposerConfiguration(
-                    properties.getRoutes(),
-                    properties.getEndpoints(),
-                    properties.getBean()
-            );
-        }
+    @Override
+    public ExposerConfiguration configureExposer() {
+        return new ExposerConfiguration(
+                properties.getRoutes(),
+                properties.getEndpoints(),
+                properties.getBean()
+        );
     }
 }

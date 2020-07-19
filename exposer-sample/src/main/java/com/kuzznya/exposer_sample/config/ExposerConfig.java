@@ -2,7 +2,6 @@ package com.kuzznya.exposer_sample.config;
 
 import com.github.kuzznya.exposer.core.config.ExposerConfiguration;
 import com.github.kuzznya.exposer.core.config.ExposerConfigurer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.RequestMethod;
