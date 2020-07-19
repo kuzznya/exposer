@@ -17,16 +17,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @AutoConfigureAfter(WebMvcAutoConfiguration.class)
 public class ExposerAutoConfiguration {
 
-//    @Bean
-//    @ConditionalOnMissingBean
-//    public ExposerConfiguration exposerConfiguration() {
-//        return new ExposerConfiguration(
-//                properties.getRoutes(),
-//                properties.getEndpoints(),
-//                properties.getBean()
-//        );
-//    }
-
     @Configuration
     @EnableWebMvc
     @ConditionalOnWebApplication
