@@ -3,5 +3,4 @@ rootProject.name = "exposer"
 include 'exposer-core'
 include 'exposer-spring-boot-autoconfigure'
 include 'exposer-spring-boot-starter'
-include 'exposer-core'
 include 'exposer-sample'

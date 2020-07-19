@@ -20,7 +20,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.kuzznya:exposer-spring-boot-starter:1.0.0'
+    implementation 'com.github.kuzznya:exposer-core:1.1.0-SNAPSHOT'
+    implementation 'com.github.kuzznya:exposer-spring-boot-starter:1.1.0-SNAPSHOT'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

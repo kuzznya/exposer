@@ -17,16 +17,15 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-@Import(ExposerConfiguration.class)
 @EnableWebMvc
 public class EndpointConfiguration {
     private final RequestMappingHandlerMapping handlerMapping;
     private final ExposerConfiguration exposerConfiguration;
     private final ApplicationContext context;
 
-    public EndpointConfiguration(RequestMappingHandlerMapping handlerMapping, ExposerConfiguration exposerConfiguration, ApplicationContext context) {
+    public EndpointConfiguration(RequestMappingHandlerMapping handlerMapping, ExposerConfigurer exposerConfigurer, ApplicationContext context) {
         this.handlerMapping = handlerMapping;
-        this.exposerConfiguration = exposerConfiguration;
+        this.exposerConfiguration = exposerConfigurer.configureExposer();
         this.context = context;
     }
 
