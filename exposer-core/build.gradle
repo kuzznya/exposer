@@ -39,6 +39,8 @@ dependencies {
     testCompile 'javax.servlet:javax.servlet-api:3.0.1'
 }
 
+jar.dependsOn(test)
+
 task sourceJar(type: Jar, dependsOn: classes) {
     classifier "sources"
     from sourceSets.main.allSource
@@ -65,7 +67,7 @@ publishing {
         mavenJava(MavenPublication) {
             pom {
                 name = 'API Exposer Core'
-                description = 'API bootstrap creator without controllers'
+                description = 'API bootstrap creator core module'
                 packaging = 'jar'
                 url = 'https://github.com/kuzznya/exposer/'
                 licenses {

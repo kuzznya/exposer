@@ -29,10 +29,10 @@ dependencyManagement {
 }
 
 dependencies {
-//    implementation 'com.github.kuzznya:exposer-core:1.1.0'
-//    implementation 'com.github.kuzznya:exposer-spring-boot-autoconfigure:1.1.0'
-    api project(':exposer-core')
-    api project(':exposer-spring-boot-autoconfigure')
+    api ('com.github.kuzznya:exposer-core:1.1.0')
+    api ('com.github.kuzznya:exposer-spring-boot-autoconfigure:1.1.0')
+//    api project(':exposer-core')
+//    api project(':exposer-spring-boot-autoconfigure')
 
     api 'org.springframework.boot:spring-boot-starter-web'
 
@@ -49,11 +49,6 @@ test {
 }
 
 compileJava.dependsOn(processResources)
-
-jar {
-    enabled=true
-    dependsOn(test)
-}
 
 task sourceJar(type: Jar, dependsOn: classes) {
     classifier "sources"
@@ -79,9 +74,13 @@ signing {
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            artifact jar
+            artifact sourceJar
+            artifact javadocJar
+
             pom {
-                name = 'API Exposer'
-                description = 'API bootstrap creator without controllers'
+                name = 'API Exposer Starter'
+                description = 'API bootstrap creator starter module'
                 packaging = 'pom'
                 url = 'https://github.com/kuzznya/exposer/'
                 licenses {
@@ -109,9 +108,19 @@ publishing {
                 }
             }
 
-            artifact jar
-            artifact sourceJar
-            artifact javadocJar
+            pom.withXml {
+                asNode().children().last() + {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+                    // Iterate over the api dependencies (we don't want the test ones), adding a <dependency> node for each
+                    configurations.api.allDependencies.each {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        if (it.version)
+                            dependencyNode.appendNode('version', it.version)
+                    }
+                }
+            }
         }
     }
 
