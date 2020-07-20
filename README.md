@@ -1,7 +1,16 @@
 # Exposer
-Spring Boot API bootstrap creator through configuration without Controllers
+Spring Boot API bootstrap creator without Controllers
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.kuzznya/exposer-spring-boot-starter.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.github.kuzznya%22%20AND%20a:%22exposer-spring-boot-starter%22)
+Required Java version: 11
+
+Project consists of 3 modules:
+* Core module with Spring dependencies
+* Spring Boot autoconfigure module
+* Spring Boot Starter module
+
+[![Core (Maven Central)](https://img.shields.io/maven-central/v/com.github.kuzznya/exposer-core.svg?label=Core%20(Maven%20Central))](https://search.maven.org/search?q=g:%22com.github.kuzznya%22%20AND%20a:%22exposer-core%22)  
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.kuzznya/exposer-spring-boot-autoconfigure.svg?label=Autoconfigure%20(Maven%20Central))](https://search.maven.org/search?q=g:%22com.github.kuzznya%22%20AND%20a:%22exposer-spring-boot-autoconfigure%22)  
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.kuzznya/exposer-spring-boot-starter.svg?label=Starter%20(Maven%20Central))](https://search.maven.org/search?q=g:%22com.github.kuzznya%22%20AND%20a:%22exposer-spring-boot-starter%22)
 
 The aim of this project is to provide a convenient way to configure API
 with Spring Boot
@@ -11,7 +20,7 @@ Spring Cloud Config when using Spring Cloud technologies
 
 ## Getting started
 
-1. Add Exposer Spring Boot Starter && Spring Boot Starter Web dependencies to your project
+1. Add Exposer Spring Boot Starter & Spring Boot Starter Web dependencies to your project
 
 with Maven:
 ```xml
@@ -19,7 +28,7 @@ with Maven:
     <dependency>
         <groupId>com.github.kuzznya</groupId>
         <artifactId>exposer</artifactId>
-        <version>1.0.0</version>
+        <version>1.1.0</version>
     </dependency>
     
     <dependency>
@@ -33,7 +42,7 @@ with Maven:
 
 with Gradle:
 ```groovy
-implementation 'com.github.kuzznya:exposer-spring-boot-starter:1.0.0'
+implementation 'com.github.kuzznya:exposer-spring-boot-starter:1.1.0'
 implementation 'org.springframework.boot:spring-boot-starter-web'
 ```
 
@@ -180,13 +189,13 @@ exposer.routes[0].endpoints[0].params.arg1=?val
 exposer.routes[0].endpoints[0].params.arg2=tst
 ```
 
-### 2. Through code with bean creation
+#### 2. Through code with bean creation
 
 ```java
 @Configuration
-public class ExposerConfig {
-    @Bean
-    ExposerConfiguration exposerConfiguration() {
+public class ExposerConfig implements ExposerConfigurer {
+    @Override
+    public ExposerConfiguration configureExposer() {
         return ExposerConfiguration.builder()
                 .bean("TestService2")
                 .route("/test")
