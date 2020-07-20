@@ -6,12 +6,12 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 @ConfigurationProperties(prefix = "exposer")
 @Data
 public class ExposerProperties {
-    private List<RouteProperty> routes = Collections.emptyList();
-    private List<EndpointProperty> endpoints = Collections.emptyList();
+    private Set<RouteProperty> routes = Collections.emptySet();
+    private Set<EndpointProperty> endpoints = Collections.emptySet();
     private String bean;
 }

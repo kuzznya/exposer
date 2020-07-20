@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -15,6 +15,6 @@ public class RouteProperty {
     @NonNull
     private String path;
     private String bean;
-    private List<RouteProperty> routes = Collections.emptyList();
-    private List<EndpointProperty> endpoints = Collections.emptyList();
+    private Set<RouteProperty> routes = Collections.emptySet();
+    private Set<EndpointProperty> endpoints = Collections.emptySet();
 }

@@ -8,28 +8,28 @@ import lombok.NonNull;
 import lombok.Value;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Value
 public class ExposerConfiguration {
-    List<RouteProperty> routes;
-    List<EndpointProperty> endpoints;
+    Set<RouteProperty> routes;
+    Set<EndpointProperty> endpoints;
     String bean;
 
 
-    public List<Endpoint> getEndpoints() {
+    public Set<Endpoint> getEndpoints() {
         return Stream.concat(
                 constructEndpoints(endpoints, "", bean).stream(),
                 routes.stream()
                         .map(routeProperty -> getEndpoints(routeProperty, routeProperty.getPath(), bean))
                         .flatMap(Collection::stream)
-        ).collect(Collectors.toList());
+        ).collect(Collectors.toSet());
     }
 
-    private List<Endpoint> getEndpoints(RouteProperty routeProperty, @NonNull String parentPath, String beanName) {
+    private Set<Endpoint> getEndpoints(RouteProperty routeProperty, @NonNull String parentPath, String beanName) {
         return Stream.concat(
                 constructEndpoints(
                         routeProperty.getEndpoints(),
@@ -46,10 +46,10 @@ public class ExposerConfiguration {
                                 )
                         )
                         .flatMap(Collection::stream)
-        ).collect(Collectors.toList());
+        ).collect(Collectors.toSet());
     }
 
-    private List<Endpoint> constructEndpoints(List<EndpointProperty> properties,
+    private Set<Endpoint> constructEndpoints(Set<EndpointProperty> properties,
                                               @NonNull String parentPath,
                                               String beanName) {
         return properties
@@ -59,7 +59,7 @@ public class ExposerConfiguration {
                                 parentPath,
                                 Optional.ofNullable(endpointProperty.getBean()).orElse(beanName)
                         )
-                ).collect(Collectors.toList());
+                ).collect(Collectors.toSet());
     }
 
     private String joinPath(@NonNull String parentPath, @NonNull String childPath) {

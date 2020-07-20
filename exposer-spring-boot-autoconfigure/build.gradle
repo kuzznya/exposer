@@ -1,14 +1,16 @@
+import org.springframework.boot.gradle.plugin.SpringBootPlugin
+
 plugins {
     id 'java-library'
     id 'maven-publish'
     id 'signing'
-    id 'org.springframework.boot' version '2.3.1.RELEASE'
+    id 'org.springframework.boot' version '2.3.1.RELEASE' apply false
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 }
 
 group = 'com.github.kuzznya'
 version = '1.1.0'
-sourceCompatibility = '11'
+sourceCompatibility = 11
 
 configurations {
     compileOnly {
@@ -21,13 +23,25 @@ repositories {
     mavenLocal()
 }
 
+dependencyManagement {
+    imports {
+        mavenBom SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
 dependencies {
-    api 'com.github.kuzznya:exposer-core:1.1.0'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+//    api 'com.github.kuzznya:exposer-core:1.1.0'
+    api project(':exposer-core')
+
+    api 'org.springframework.boot:spring-boot-starter-web'
+
     compileOnly 'org.projectlombok:lombok'
+
     annotationProcessor "org.springframework.boot:spring-boot-autoconfigure-processor"
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
     annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
@@ -38,10 +52,6 @@ test {
 }
 
 compileJava.dependsOn(processResources)
-
-bootJar {
-    enabled=false
-}
 
 jar {
     enabled=true

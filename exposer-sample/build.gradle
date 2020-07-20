@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.kuzznya'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = 11
 
 configurations {
     compileOnly {
@@ -20,8 +20,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.kuzznya:exposer-core:1.1.0'
-    implementation 'com.github.kuzznya:exposer-spring-boot-starter:1.1.0'
+//    implementation 'com.github.kuzznya:exposer-core:1.1.0'
+//    implementation 'com.github.kuzznya:exposer-spring-boot-starter:1.1.0'
+    implementation project(':exposer-spring-boot-starter')
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'

@@ -5,14 +5,14 @@ import com.github.kuzznya.exposer.core.model.RouteProperty;
 import lombok.Getter;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public abstract class RouteBuilder<BuilderClass extends RouteBuilder<BuilderClass>> {
     @Getter
-    private final List<RouteProperty> routes = new ArrayList<>();
+    private final Set<RouteProperty> routes = new LinkedHashSet<>();
     @Getter
-    private final List<EndpointProperty> endpoints = new ArrayList<>();
+    private final Set<EndpointProperty> endpoints = new LinkedHashSet<>();
     @Getter
     private String bean;
 

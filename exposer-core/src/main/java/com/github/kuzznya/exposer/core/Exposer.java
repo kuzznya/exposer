@@ -1,10 +1,12 @@
-package com.github.kuzznya.exposer.core.config;
+package com.github.kuzznya.exposer.core;
 
+import com.github.kuzznya.exposer.core.config.EndpointHandler;
+import com.github.kuzznya.exposer.core.config.ExposerConfiguration;
+import com.github.kuzznya.exposer.core.config.ExposerConfigurer;
 import com.github.kuzznya.exposer.core.model.Endpoint;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -16,14 +18,14 @@ import java.lang.reflect.Parameter;
 import java.util.Arrays;
 import java.util.List;
 
-@Configuration
+@Component
 @EnableWebMvc
-public class EndpointConfiguration {
+public class Exposer {
     private final RequestMappingHandlerMapping handlerMapping;
     private final ExposerConfiguration exposerConfiguration;
     private final ApplicationContext context;
 
-    public EndpointConfiguration(RequestMappingHandlerMapping handlerMapping, ExposerConfigurer exposerConfigurer, ApplicationContext context) {
+    public Exposer(RequestMappingHandlerMapping handlerMapping, ExposerConfigurer exposerConfigurer, ApplicationContext context) {
         this.handlerMapping = handlerMapping;
         this.exposerConfiguration = exposerConfigurer.configureExposer();
         this.context = context;
