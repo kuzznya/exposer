@@ -10,11 +10,22 @@ public class ExposerConfig implements ExposerConfigurer {
     @Override
     public ExposerConfiguration configureExposer() {
         return ExposerConfiguration.builder()
-                .route("/test")
-                .bean("exposingService")
-                .endpoint(RequestMethod.DELETE, "deleteMethod").param("value", "?val").and()
-                .endpoint(RequestMethod.GET, "testMethod").register()
-                .add()
+                .bean("TestService2")
+                    .route("/test")
+                        .route("/v1")
+                            .bean("TestService")
+                            .endpoint(RequestMethod.GET, "getValue").and()
+                            .endpoint(RequestMethod.POST, "setValue").register()
+                        .and()
+                        .route("/v2")
+                            .endpoint(RequestMethod.GET, "setValue")
+                                .bean("TestService").param("value", "?val")
+                                .register()
+                        .and()
+                        .endpoint(RequestMethod.GET, "joinTwoArgs")
+                            .param("arg1", "?val").param("arg2", "tst")
+                            .register()
+                        .add()
                 .configure();
     }
 }
