@@ -18,7 +18,7 @@ public class EndpointPropertyBuilder<ParentBuilderClass extends RouteBuilder<?>>
     @NonNull
     private final String beanMethod;
 
-    private final Map<String, String> params = new HashMap<>();
+    private Map<String, String> params;
 
     public EndpointPropertyBuilder(ParentBuilderClass parentBuilder, RequestMethod httpMethod, String beanMethod) {
         this.parentBuilder = parentBuilder;
@@ -27,6 +27,8 @@ public class EndpointPropertyBuilder<ParentBuilderClass extends RouteBuilder<?>>
     }
 
     public EndpointPropertyBuilder<ParentBuilderClass> param(String key, String value) {
+        if (params == null)
+            params = new HashMap<>();
         params.put(key, value);
         return this;
     }
