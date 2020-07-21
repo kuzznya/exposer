@@ -1,10 +1,11 @@
 package com.github.kuzznya.exposer.core;
 
-import com.github.kuzznya.exposer.core.config.EndpointHandler;
 import com.github.kuzznya.exposer.core.config.ExposerConfiguration;
 import com.github.kuzznya.exposer.core.config.ExposerConfigurer;
 import com.github.kuzznya.exposer.core.model.Endpoint;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.MultiValueMap;
@@ -14,9 +15,8 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @EnableWebMvc
@@ -25,7 +25,11 @@ public class Exposer {
     private final ExposerConfiguration exposerConfiguration;
     private final ApplicationContext context;
 
-    public Exposer(RequestMappingHandlerMapping handlerMapping, ExposerConfigurer exposerConfigurer, ApplicationContext context) {
+    private final ParameterNameDiscoverer paramsDiscoverer = new DefaultParameterNameDiscoverer();
+
+    public Exposer(RequestMappingHandlerMapping handlerMapping,
+                   ExposerConfigurer exposerConfigurer,
+                   ApplicationContext context) {
         this.handlerMapping = handlerMapping;
         this.exposerConfiguration = exposerConfigurer.configureExposer();
         this.context = context;
@@ -47,7 +51,8 @@ public class Exposer {
 
             serviceMethod.setAccessible(true);
 
-            EndpointHandler handler = new EndpointHandler(service, serviceMethod, endpoint.getParamsMapping());
+            EndpointHandler handler = new EndpointHandler(service, serviceMethod, endpoint.getParamsMapping(),
+                    paramsDiscoverer);
 
             handlerMapping.registerMapping(
                     RequestMappingInfo
@@ -56,9 +61,8 @@ public class Exposer {
                             .params(
                                     endpoint.getParamsMapping() != null ?
                                             endpoint.getRequestParams().toArray(String[]::new) :
-                                            Arrays.stream(serviceMethod.getParameters())
-                                                    .map(Parameter::getName)
-                                                    .toArray(String[]::new)
+                                            Optional.ofNullable(paramsDiscoverer.getParameterNames(serviceMethod))
+                                                    .orElse(new String[0])
                             )
                             .produces(MediaType.APPLICATION_JSON_VALUE)
                             .build(),
