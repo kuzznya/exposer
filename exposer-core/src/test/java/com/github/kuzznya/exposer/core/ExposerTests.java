@@ -50,5 +50,11 @@ public class ExposerTests {
                 .andExpect(MockMvcResultMatchers.content().string("xxxxtst"))
                 .andDo(MockMvcResultHandlers.log())
                 .andReturn();
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/test/listsize?list=arg1&list=arg2&list=arg3"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().json("{size: 3}"))
+                .andDo(MockMvcResultHandlers.log())
+                .andReturn();
     }
 }

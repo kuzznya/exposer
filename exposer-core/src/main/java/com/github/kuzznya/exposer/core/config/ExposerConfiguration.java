@@ -62,7 +62,7 @@ public class ExposerConfiguration {
                 ).collect(Collectors.toSet());
     }
 
-    private String joinPath(@NonNull String parentPath, @NonNull String childPath) {
+    public static String joinPath(@NonNull String parentPath, @NonNull String childPath) {
         parentPath = !parentPath.equals("/") ? parentPath : "";
         childPath = !childPath.equals("/") ? childPath : "";
 
