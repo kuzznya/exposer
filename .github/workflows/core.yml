@@ -33,5 +33,5 @@ jobs:
     - name: Upload converage to Codecov
       uses: codecov/codecov-action@v1
       with:
-        directory: exposer-core/build/
+        file: exposer-core/build/reports/jacoco/report.xml
       
