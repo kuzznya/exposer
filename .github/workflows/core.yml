@@ -30,6 +30,8 @@ jobs:
       run: chmod +x gradlew
     - name: Test with Gradle
       run: ./gradlew exposer-core:test -PsonatypeUsername=${{ secrets.SONATYPE_USERNAME }} -PsonatypePassword=${{ secrets.SONATYPE_PASSWORD }}
-    - name: Upload converage to Codecov
+    - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
+      with:
+        file: exposer-core/build/reports/jacoco/test/jacocoTestReport.xml
       
