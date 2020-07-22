@@ -29,8 +29,8 @@ with Maven:
 <dependencies>
     <dependency>
         <groupId>com.github.kuzznya</groupId>
-        <artifactId>exposer</artifactId>
-        <version>1.1.0</version>
+        <artifactId>exposer-spring-boot-starter</artifactId>
+        <version>1.1.2</version>
     </dependency>
     
     <dependency>
@@ -44,7 +44,7 @@ with Maven:
 
 with Gradle:
 ```groovy
-implementation 'com.github.kuzznya:exposer-spring-boot-starter:1.1.0'
+implementation 'com.github.kuzznya:exposer-spring-boot-starter:1.1.2'
 implementation 'org.springframework.boot:spring-boot-starter-web'
 ```
 
