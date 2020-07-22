@@ -12,6 +12,8 @@ Project consists of 3 modules:
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.kuzznya/exposer-spring-boot-autoconfigure.svg?label=Autoconfigure%20(Maven%20Central))](https://search.maven.org/search?q=g:%22com.github.kuzznya%22%20AND%20a:%22exposer-spring-boot-autoconfigure%22)  
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.kuzznya/exposer-spring-boot-starter.svg?label=Starter%20(Maven%20Central))](https://search.maven.org/search?q=g:%22com.github.kuzznya%22%20AND%20a:%22exposer-spring-boot-starter%22)
 
+[![codecov](https://codecov.io/gh/kuzznya/exposer/branch/master/graph/badge.svg)](https://codecov.io/gh/kuzznya/exposer)
+
 The aim of this project is to provide a convenient way to configure API
 with Spring Boot
 
