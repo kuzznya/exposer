@@ -1,0 +1,37 @@
+# This workflow will build a Java project with Gradle
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Exposer Autoconfiguration CI
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'exposer-spring-boot-autoconfigure/**'
+      - '.github/workflows/autoconfigure.yml'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'exposer-spring-boot-autoconfigure/**'
+      - '.github/workflows/autoconfigure.yml'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Test with Gradle
+        run: ./gradlew exposer-spring-boot-autoconfigure:test -PsonatypeUsername=${{ secrets.SONATYPE_USERNAME }} -PsonatypePassword=${{ secrets.SONATYPE_PASSWORD }}
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: exposer-spring-boot-autoconfigure/build/reports/jacoco/test/jacocoTestReport.xml
+

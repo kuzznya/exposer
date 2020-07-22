@@ -57,6 +57,9 @@ test {
 }
 jacocoTestReport {
     dependsOn test
+    reports {
+        xml.enabled true
+    }
 }
 
 compileJava.dependsOn(processResources)
