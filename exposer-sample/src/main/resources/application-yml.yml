@@ -2,7 +2,6 @@ exposer:
   bean: TestService2
   routes:
     - path: /test
-      #      bean: TestService
       routes:
         - path: /v1
           bean: TestService
@@ -18,6 +17,10 @@ exposer:
               bean-method: setValue
               params:
                 value: ?val
+        - path: /listsize
+          endpoints:
+            - http-method: GET
+              bean-method: getListSize
       endpoints:
         - http-method: GET
           bean-method: joinTwoArgs
