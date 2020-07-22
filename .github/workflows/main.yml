@@ -6,8 +6,16 @@ name: Exposer main CI
 on:
   push:
     branches: [ master ]
+    paths:
+      - exposer-core/**
+      - exposer-spring-boot-autoconfigure/**
+      - .github/workflows/main.yml
   pull_request:
     branches: [ master ]
+    paths:
+      - exposer-core/**
+      - exposer-spring-boot-autoconfigure/**
+      - .github/workflows/main.yml
 
 jobs:
   build:
