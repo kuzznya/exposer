@@ -1,4 +1,4 @@
-package com.github.kuzznya.exposer.autoconfigure.model;
+package com.github.kuzznya.exposer.autoconfigure;
 
 import com.github.kuzznya.exposer.core.model.EndpointProperty;
 import com.github.kuzznya.exposer.core.model.RouteProperty;

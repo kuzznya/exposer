@@ -1,9 +1,29 @@
 exposer:
-  bean: ApiExposerApplicationTests
+  bean: TestService2
   routes:
     - path: /test
+      routes:
+        - path: /v1
+          bean: TestService
+          endpoints:
+            - http-method: GET
+              bean-method: getValue
+            - http-method: POST
+              bean-method: setValue
+        - path: /v2
+          bean: TestService
+          endpoints:
+            - http-method: GET
+              bean-method: setValue
+              params:
+                value: ?val
+        - path: /listsize
+          endpoints:
+            - http-method: GET
+              bean-method: getListSize
       endpoints:
         - http-method: GET
-          bean-method: testMethod
-          args:
-            value: ?val
+          bean-method: joinTwoArgs
+          params:
+            arg1: ?val
+            arg2: tst

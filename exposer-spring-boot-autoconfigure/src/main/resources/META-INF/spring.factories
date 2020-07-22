@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.github.kuzznya.exposer.autoconfigure.config.ExposerAutoConfiguration
+  com.github.kuzznya.exposer.autoconfigure.ExposerAutoConfiguration

@@ -1,6 +1,5 @@
-package com.github.kuzznya.exposer.autoconfigure.config;
+package com.github.kuzznya.exposer.autoconfigure;
 
-import com.github.kuzznya.exposer.autoconfigure.model.ExposerProperties;
 import com.github.kuzznya.exposer.core.config.ExposerConfiguration;
 import com.github.kuzznya.exposer.core.config.ExposerConfigurer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
