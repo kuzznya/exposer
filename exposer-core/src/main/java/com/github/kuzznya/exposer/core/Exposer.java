@@ -64,7 +64,6 @@ public class Exposer {
                                             Optional.ofNullable(paramsDiscoverer.getParameterNames(serviceMethod))
                                                     .orElse(new String[0])
                             )
-                            .produces(MediaType.APPLICATION_JSON_VALUE)
                             .build(),
                     handler,
                     EndpointHandler.class.getDeclaredMethod("handle", MultiValueMap.class)

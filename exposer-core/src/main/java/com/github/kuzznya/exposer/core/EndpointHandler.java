@@ -22,12 +22,6 @@ public class EndpointHandler {
 
     private final ParameterNameDiscoverer paramsDiscoverer;
 
-    @Value
-    private static class ParameterData {
-        String name;
-        Class<?> type;
-    }
-
     public EndpointHandler(Object service, Method method, Map<String, String> paramsMapping,
                            ParameterNameDiscoverer paramsDiscoverer) {
         this.service = service;
