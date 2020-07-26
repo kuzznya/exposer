@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Component
@@ -66,7 +67,7 @@ public class Exposer {
                             )
                             .build(),
                     handler,
-                    EndpointHandler.class.getDeclaredMethod("handle", MultiValueMap.class)
+                    EndpointHandler.class.getDeclaredMethod("handle", MultiValueMap.class, Map.class)
             );
         }
     }

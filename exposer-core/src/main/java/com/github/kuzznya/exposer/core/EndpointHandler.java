@@ -1,11 +1,11 @@
 package com.github.kuzznya.exposer.core;
 
 import lombok.NonNull;
-import lombok.Value;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -71,7 +71,8 @@ public class EndpointHandler {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
-    public Object handle(@RequestParam MultiValueMap<String, String> requestParams)
+    public Object handle(@RequestParam MultiValueMap<String, String> requestParams,
+                         @PathVariable Map<String, String> pathVariables)
             throws InvocationTargetException, IllegalAccessException {
         if (paramsMapping != null)
             return method.invoke(
