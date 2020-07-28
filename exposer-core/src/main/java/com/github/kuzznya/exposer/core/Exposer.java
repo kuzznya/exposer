@@ -81,9 +81,7 @@ public class Exposer {
 
     @PreDestroy
     public void unregisterEndpoints() {
-        for (RequestMappingInfo mappingInfo : mappings) {
-            handlerMapping.unregisterMapping(mappingInfo);
-        }
+        mappings.forEach(handlerMapping::unregisterMapping);
     }
 
 }
