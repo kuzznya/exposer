@@ -1,6 +1,5 @@
 package com.github.kuzznya.exposer.core.util;
 
-import lombok.AllArgsConstructor;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -11,15 +10,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@AllArgsConstructor
 public class ParameterEvaluator {
-    private final RequestData requestData;
     private final EvaluationContext evaluationContext;
     private final ExpressionParser expressionParser = new SpelExpressionParser();
 
     public ParameterEvaluator(MultiValueMap<String, String> requestParams,
                               Map<String, String> pathVariables) {
-        requestData = new RequestData(requestParams, pathVariables);
+        RequestData requestData = new RequestData(requestParams, pathVariables);
         evaluationContext = new StandardEvaluationContext(requestData);
     }
 
