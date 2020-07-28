@@ -1,106 +1,71 @@
 package com.github.kuzznya.exposer.core.util;
 
 import lombok.AllArgsConstructor;
+import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.MultiValueMap;
 
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @AllArgsConstructor
 public class ParameterEvaluator {
-    private final MultiValueMap<String, String> requestParams;
-    private final Map<String, String> pathVariables;
+    private final RequestData requestData;
+    private final EvaluationContext evaluationContext;
+    private final ExpressionParser expressionParser = new SpelExpressionParser();
 
-    private static String getKey(String query) {
-        return getKey(query, 0);
+    public ParameterEvaluator(MultiValueMap<String, String> requestParams,
+                              Map<String, String> pathVariables) {
+        requestData = new RequestData(requestParams, pathVariables);
+        evaluationContext = new StandardEvaluationContext(requestData);
     }
 
-    private static String getKey(String query, int keyIndex) {
-        Pattern pattern = Pattern.compile("\\[\\w+]");
-        Matcher matcher = pattern.matcher(query);
-        if (matcher.find()) {
-            String result = matcher.group(keyIndex);
-            return result.substring(1, result.length() - 1).strip();
-        }
-        else
-            throw new EvaluationException();
+    private Object evaluate(String expression) {
+        return expressionParser
+                .parseExpression(expression)
+                .getValue(evaluationContext);
     }
 
-    private Object getParams(String query) {
-        if (!query.matches("params(\\[\\w+](\\[\\d+])?)?"))
-            throw new IllegalArgumentException();
-
-        if (query.equals("params"))
-            return requestParams;
-
-        if (query.matches("params\\[\\w+]"))
-            return requestParams.get(getKey(query));
-        else
-            return requestParams
-                    .get(getKey(query, 0))
-                    .get(Integer.parseInt(getKey(query, 1)));
-    }
-
-    private String getPathVariable(String query) {
-        if (!query.matches("path\\[\\w+]"))
-            throw new IllegalArgumentException();
-
-        return pathVariables.get(getValue(getKey(query)).toString());
-    }
-
-    private Object evaluate(String query) {
-        if (query.startsWith("params"))
-            return getParams(query);
-        else if (query.startsWith("path"))
-            return getPathVariable(query);
-        else if (query.matches("\\{\\+}"))
-            return Stream.of(query.substring(1, query.length() - 1).split(","))
-                    .map(String::strip)
-                    .map(this::getValue)
-                    .collect(Collectors.toUnmodifiableList());
-        else
-            throw new EvaluationException("Cannot evaluate expression: " + query);
-    }
-
-    public Object getObjectValue(String expression) {
-        if (!expression.startsWith("$(") || !expression.endsWith(")"))
+    public Object getObjectValue(String query) {
+        if (!query.startsWith("$(") || !query.endsWith(")"))
             throw new EvaluationException();
 
-        return evaluate(expression.substring(2, expression.length() - 1));
+        return evaluate(query.substring(2, query.length() - 1));
     }
 
-    public String getStringValue(String expression) {
-        expression = expression.replaceAll("[\\\\][$]", "__DOLLAR_SIGN__");
+    public String getStringValue(String query) {
+        query = query.replaceAll("[\\\\][$]", "__DOLLAR_SIGN__");
 
         Pattern pattern = Pattern.compile("[$]\\(.*\\)");
-        Matcher matcher = pattern.matcher(expression);
+        Matcher matcher = pattern.matcher(query);
 
         while (matcher.find()) {
-            Object result = evaluate(matcher.group());
+            String expression = matcher.group();
+            Object result = evaluate(expression.substring(2, expression.length() - 1));
             if (!(result instanceof String))
                 throw new EvaluationException("Cannot concat non-String result with String expression");
 
-            matcher = pattern.matcher(
-                    matcher.replaceFirst((String) result)
-            );
+            query = matcher.replaceFirst((String) result);
+
+            matcher = pattern.matcher(query);
         }
 
-        return expression.replaceAll("__DOLLAR_SIGN__", "$");
+        return query.replaceAll("__DOLLAR_SIGN__", "$");
     }
 
-    public Object getValue(String expression) {
-        expression = expression.strip();
+    public Object getValue(String query) {
+        query = query.strip();
 
         try {
-            if (expression.matches("[$]\\(.*\\)"))
-                return getObjectValue(expression);
+            if (query.matches("[$]\\(.*\\)"))
+                return getObjectValue(query);
             else
-                return getStringValue(expression);
+                return getStringValue(query);
         } catch (IllegalArgumentException ex) {
-            throw new EvaluationException("Cannot evaluate expression: " + expression, ex);
+            throw new EvaluationException("Cannot evaluate query: " + query, ex);
         }
     }
 }

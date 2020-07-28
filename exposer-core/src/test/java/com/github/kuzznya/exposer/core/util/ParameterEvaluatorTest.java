@@ -29,14 +29,17 @@ public class ParameterEvaluatorTest {
     public void evaluationTest() {
         assertEquals(
                 List.of("value1", "value2"),
-                evaluator.getValue("$(params[key1])")
+                evaluator.getValue("$(params['key1'])")
         );
         assertEquals(
                 "val2",
-                evaluator.getValue("$(path[pathVar2])")
+                evaluator.getValue("$(pathVars['pathVar2'])}")
         );
 
-        assertThrows(EvaluationException.class, () -> evaluator.getValue("$(path)"));
+        assertEquals(
+                "val2test",
+                evaluator.getValue("$(pathVars['pathVar2'])test")
+        );
     }
 
 }
