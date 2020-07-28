@@ -83,7 +83,6 @@ public class Exposer {
     public void unregisterEndpoints() {
         for (RequestMappingInfo mappingInfo : mappings) {
             handlerMapping.unregisterMapping(mappingInfo);
-            System.out.println(mappingInfo.getPatternsCondition().getPatterns());
         }
     }
 
