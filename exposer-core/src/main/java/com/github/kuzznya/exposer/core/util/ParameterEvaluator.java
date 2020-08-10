@@ -1,11 +1,13 @@
 package com.github.kuzznya.exposer.core.util;
 
 import org.springframework.expression.EvaluationContext;
+import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.SimpleEvaluationContext;
 import org.springframework.util.MultiValueMap;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,19 +16,37 @@ public class ParameterEvaluator {
     private final EvaluationContext evaluationContext;
     private final ExpressionParser expressionParser = new SpelExpressionParser();
 
-    public ParameterEvaluator(MultiValueMap<String, String> requestParams,
-                              Map<String, String> pathVariables) {
-        RequestData requestData = new RequestData(requestParams, pathVariables);
+    private RequestData requestData;
+
+    private final Map<String, Expression> parsedExpressions = new HashMap<>();
+
+    public ParameterEvaluator() {
         evaluationContext = SimpleEvaluationContext
                 .forReadOnlyDataBinding()
-                .withRootObject(requestData)
                 .build();
     }
 
+    public ParameterEvaluator(MultiValueMap<String, String> requestParams,
+                              Map<String, String> pathVariables) {
+        this();
+        setRequestData(requestParams, pathVariables);
+    }
+
+    public void setRequestData(MultiValueMap<String, String> requestParams,
+                               Map<String, String> pathVariables) {
+        requestData = new RequestData(requestParams, pathVariables);
+    }
+
     private Object evaluate(String expression) {
-        return expressionParser
-                .parseExpression(expression)
-                .getValue(evaluationContext);
+        if (!parsedExpressions.containsKey(expression))
+            parsedExpressions.put(
+                    expression,
+                    expressionParser.parseExpression(expression)
+            );
+
+        return parsedExpressions
+                .get(expression)
+                .getValue(evaluationContext, requestData);
     }
 
     public Object getObjectValue(String query) {
