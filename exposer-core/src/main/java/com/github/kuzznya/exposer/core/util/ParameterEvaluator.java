@@ -17,7 +17,10 @@ public class ParameterEvaluator {
     public ParameterEvaluator(MultiValueMap<String, String> requestParams,
                               Map<String, String> pathVariables) {
         RequestData requestData = new RequestData(requestParams, pathVariables);
-        evaluationContext = new StandardEvaluationContext(requestData);
+        evaluationContext = SimpleEvaluationContext
+                .forReadOnlyDataBinding()
+                .withRootObject(requestData)
+                .build();
     }
 
     private Object evaluate(String expression) {
