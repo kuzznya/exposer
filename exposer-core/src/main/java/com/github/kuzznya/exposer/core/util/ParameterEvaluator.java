@@ -3,7 +3,7 @@ package com.github.kuzznya.exposer.core.util;
 import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.expression.spel.support.SimpleEvaluationContext;
 import org.springframework.util.MultiValueMap;
 
 import java.util.Map;
@@ -50,7 +50,7 @@ public class ParameterEvaluator {
             matcher = pattern.matcher(query);
         }
 
-        return query.replaceAll("__DOLLAR_SIGN__", "$");
+        return query.replaceAll("__DOLLAR_SIGN__", "\\$");
     }
 
     public Object getValue(String query) {

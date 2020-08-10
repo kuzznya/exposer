@@ -33,12 +33,17 @@ public class ParameterEvaluatorTest {
         );
         assertEquals(
                 "val2",
-                evaluator.getValue("$(pathVars['pathVar2'])}")
+                evaluator.getValue("$(pathVars['pathVar2'])")
         );
 
         assertEquals(
                 "val2test",
                 evaluator.getValue("$(pathVars['pathVar2'])test")
+        );
+
+        assertEquals(
+                "val2te$t",
+                evaluator.getValue("$(pathVars['pathVar2'])te\\$t")
         );
     }
 
