@@ -27,3 +27,8 @@ exposer:
           params:
             arg1: $(params['val'])
             arg2: tst
+        - http-method: POST
+          bean-method: joinTwoArgs
+          params:
+            arg1: $(bodyData['arg1'])
+            arg2: $(bodyData['arg2'])

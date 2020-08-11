@@ -66,6 +66,17 @@ public class ExposerTests {
 
         mockMvc.perform(
                 MockMvcRequestBuilders
+                        .post("/test")
+                        .content(new ObjectMapper().writeValueAsString(new TestRequestBodyClass(List.of(), "xxxx")))
+                        .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("xxxxtst"))
+                .andDo(MockMvcResultHandlers.log())
+                .andReturn();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders
                         .post("/test/listsize")
                         .content(new ObjectMapper().writeValueAsString(Map.of("list", List.of(1, 2, 3))))
                         .contentType(MediaType.APPLICATION_JSON)

@@ -1,13 +1,17 @@
 package com.github.kuzznya.exposer.autoconfigure;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.Map;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -34,6 +38,17 @@ class ExposerApiTests {
                 .andReturn();
 
         mockMvc.perform(MockMvcRequestBuilders.get("/test?val=xxxx"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("xxxxtst"))
+                .andDo(MockMvcResultHandlers.log())
+                .andReturn();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post("/test")
+                .content(new ObjectMapper().writeValueAsString(Map.of("arg1", "xxxx", "arg2", "tst")))
+                .contentType(MediaType.APPLICATION_JSON)
+        )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("xxxxtst"))
                 .andDo(MockMvcResultHandlers.log())

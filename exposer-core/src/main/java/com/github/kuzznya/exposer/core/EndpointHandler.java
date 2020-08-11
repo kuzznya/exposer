@@ -1,5 +1,6 @@
 package com.github.kuzznya.exposer.core;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.kuzznya.exposer.core.util.EvaluationException;
 import com.github.kuzznya.exposer.core.util.ParameterEvaluator;
 import lombok.NonNull;
@@ -23,13 +24,16 @@ public class EndpointHandler {
 
     private final ParameterEvaluator evaluator;
 
+    private final Class<?> requestBodyClass;
+
     public EndpointHandler(Object service, Method method, Map<String, String> paramsMapping,
-                           ParameterNameDiscoverer paramsDiscoverer) {
+                           ParameterNameDiscoverer paramsDiscoverer, Class<?> requestBodyClass) {
         this.service = service;
         this.method = method;
         this.paramsMapping = paramsMapping;
         this.paramsDiscoverer = paramsDiscoverer;
         this.evaluator = new ParameterEvaluator();
+        this.requestBodyClass = requestBodyClass;
     }
 
     private List<Object> mapParams(Collection<MethodParameter> parameters,
@@ -74,9 +78,17 @@ public class EndpointHandler {
     @ResponseStatus(HttpStatus.OK)
     public Object handle(@RequestParam MultiValueMap<String, String> requestParams,
                          @PathVariable Map<String, String> pathVariables,
-                         @RequestBody(required = false) Map<String, Object> requestBody)
+                         @RequestBody(required = false) Map<String, Object> requestBodyData)
             throws InvocationTargetException, IllegalAccessException {
-        evaluator.setRequestData(requestParams, pathVariables, null, requestBody);
+        ObjectMapper mapper = new ObjectMapper();
+
+        if (requestBodyClass != null)
+            evaluator.setRequestData(requestParams, pathVariables,
+                    mapper.convertValue(requestBodyData, requestBodyClass), requestBodyData);
+        else
+            evaluator.setRequestData(requestParams, pathVariables,
+                    requestBodyData, requestBodyData);
+
         if (paramsMapping != null)
             return method.invoke(
                     service,

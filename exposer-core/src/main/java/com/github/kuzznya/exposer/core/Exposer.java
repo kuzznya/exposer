@@ -45,6 +45,7 @@ public class Exposer {
             String beanName = endpoint.getBeanName();
             beanName = Character.toLowerCase(beanName.charAt(0)) + beanName.substring(1);
             String methodName = endpoint.getBeanMethod();
+            Class<?> requestBodyClass = endpoint.getRequestBodyClass();
 
             Object service = context.getBean(beanName);
             Method serviceMethod = List.of(service.getClass().getDeclaredMethods())
@@ -56,7 +57,7 @@ public class Exposer {
             serviceMethod.setAccessible(true);
 
             EndpointHandler handler = new EndpointHandler(service, serviceMethod, endpoint.getParamsMapping(),
-                    paramsDiscoverer);
+                    paramsDiscoverer, requestBodyClass);
 
             RequestMappingInfo mappingInfo = RequestMappingInfo
                     .paths(endpoint.getPath())
@@ -66,7 +67,8 @@ public class Exposer {
             handlerMapping.registerMapping(
                     mappingInfo,
                     handler,
-                    EndpointHandler.class.getDeclaredMethod("handle", MultiValueMap.class, Map.class, Map.class)
+                    EndpointHandler.class.getDeclaredMethod("handle",
+                            MultiValueMap.class, Map.class, Map.class)
             );
 
             mappings.add(mappingInfo);
