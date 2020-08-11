@@ -1,5 +1,7 @@
 package com.github.kuzznya.exposer.core;
 
+import com.github.kuzznya.exposer.core.util.EvaluationException;
+import com.github.kuzznya.exposer.core.util.ParameterEvaluator;
 import lombok.NonNull;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ParameterNameDiscoverer;
@@ -22,39 +24,41 @@ public class EndpointHandler {
 
     private final ParameterNameDiscoverer paramsDiscoverer;
 
+    private final ParameterEvaluator evaluator;
+
     public EndpointHandler(Object service, Method method, Map<String, String> paramsMapping,
                            ParameterNameDiscoverer paramsDiscoverer) {
         this.service = service;
         this.method = method;
         this.paramsMapping = paramsMapping;
         this.paramsDiscoverer = paramsDiscoverer;
+        this.evaluator = new ParameterEvaluator();
     }
 
-    private List<Object> mapParams(MultiValueMap<String, String> requestParams,
-                                   Collection<MethodParameter> parameters,
+    private List<Object> mapParams(Collection<MethodParameter> parameters,
                                    @NonNull Map<String, String> paramsMapping) {
         return parameters.stream()
-                .map(parameter -> parameter.getParameterType().cast(
-                        paramsMapping.get(parameter.getParameterName()).startsWith("?") ?
-                                (Collection.class.isAssignableFrom(parameter.getParameterType()) ?
-                                        requestParams.get(paramsMapping.get(parameter.getParameterName()).substring(1)) :
-                                        requestParams.getFirst(paramsMapping.get(parameter.getParameterName()).substring(1))
-                                ) :
-                                paramsMapping.get(parameter.getParameterName())
-                        )
-                )
+                .map(parameter -> {
+                    Object result = evaluator.getValue(paramsMapping.get(parameter.getParameterName()));
+
+                    if (result instanceof Collection &&
+                            !Collection.class.isAssignableFrom(parameter.getParameterType()))
+                        return ((Collection<?>) result).stream()
+                                .findFirst()
+                                .orElseThrow(EvaluationException::new);
+                    else
+                        return result;
+                })
                 .collect(Collectors.toList());
     }
 
-    private List<Object> mapParams(MultiValueMap<String, String> requestParams,
-                                   Collection<MethodParameter> parameters) {
+    private List<Object> mapParams(Collection<MethodParameter> parameters,
+                                   MultiValueMap<String, String> requestParams) {
         return parameters.stream()
-                .map(parameter -> parameter.getParameterType().cast(
-                        (requestParams.get(parameter.getParameterName()).size() == 1 ||
+                .map(parameter -> (requestParams.get(parameter.getParameterName()).size() == 1 ||
                                 !Collection.class.isAssignableFrom(parameter.getParameterType())) ?
-                                requestParams.getFirst(Objects.requireNonNull(parameter.getParameterName())) :
-                                requestParams.get(parameter.getParameterName())
-                        )
+                        requestParams.getFirst(Objects.requireNonNull(parameter.getParameterName())) :
+                        requestParams.get(parameter.getParameterName())
                 )
                 .collect(Collectors.toList());
     }
@@ -74,15 +78,16 @@ public class EndpointHandler {
     public Object handle(@RequestParam MultiValueMap<String, String> requestParams,
                          @PathVariable Map<String, String> pathVariables)
             throws InvocationTargetException, IllegalAccessException {
+        evaluator.setRequestData(requestParams, pathVariables);
         if (paramsMapping != null)
             return method.invoke(
                     service,
-                    mapParams(requestParams, getMethodParameters(method), paramsMapping).toArray()
+                    mapParams(getMethodParameters(method), paramsMapping).toArray()
             );
         else
             return method.invoke(
                     service,
-                    mapParams(requestParams, getMethodParameters(method)).toArray()
+                    mapParams(getMethodParameters(method), requestParams).toArray()
             );
     }
 }
