@@ -48,7 +48,7 @@ public class Exposer {
             Class<?> requestBodyClass = endpoint.getRequestBodyClass();
 
             Object service = context.getBean(beanName);
-            Method serviceMethod = List.of(service.getClass().getDeclaredMethods())
+            Method serviceMethod = List.of(service.getClass().getMethods())
                     .stream()
                     .filter((method -> method.getName().equals(methodName)))
                     .findAny()
