@@ -16,7 +16,7 @@ exposer:
             - http-method: GET
               bean-method: setValue
               params:
-                value: $(params['val'])
+                value: params['val']
         - path: /listsize
           endpoints:
             - http-method: GET
@@ -26,19 +26,19 @@ exposer:
         - http-method: GET
           bean-method: joinTwoArgs
           params:
-            arg1: $(params['val'])
-            arg2: tst
+            arg1: params['val']
+            arg2: ('tst')
         - http-method: POST
           bean-method: joinTwoArgs
           params:
-            arg1: $(bodyData['arg1'])
-            arg2: $(bodyData['arg2'])
+            arg1: bodyData['arg1']
+            arg2: bodyData['arg2']
     - path: joinSer
       endpoints:
         - http-method: POST
           bean-method: joinTwoArgs
           request-body-class: com.github.kuzznya.exposer.autoconfigure.TestRequestBodyClass
           params:
-            arg1: $(body.arg1)
-            arg2: $(body.arg2)
+            arg1: body.arg1
+            arg2: body.arg2
 

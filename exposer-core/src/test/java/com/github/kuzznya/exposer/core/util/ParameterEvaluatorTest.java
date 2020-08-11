@@ -38,31 +38,31 @@ public class ParameterEvaluatorTest {
     public void evaluationTest() {
         assertEquals(
                 List.of("value1", "value2"),
-                evaluator.getValue("$(params['key1'])")
+                evaluator.evaluate("params['key1']")
         );
         assertEquals(
                 "val2",
-                evaluator.getValue("$(pathVars['pathVar2'])")
+                evaluator.evaluate("pathVars['pathVar2']")
         );
 
         assertEquals(
                 "val2test",
-                evaluator.getValue("$(pathVars['pathVar2'])test")
+                evaluator.evaluate("pathVars['pathVar2'] + 'test'")
         );
 
         assertEquals(
                 "val2te$t",
-                evaluator.getValue("$(pathVars['pathVar2'])te\\$t")
+                evaluator.evaluate("pathVars['pathVar2'] + 'te$t'")
         );
 
         assertEquals(
                 "bodyVal",
-                evaluator.getValue("$(bodyData['key1'])")
+                evaluator.evaluate("bodyData['key1']")
         );
 
         assertEquals(
                 List.of(1, 2, 3),
-                evaluator.getValue("$(body.list)")
+                evaluator.evaluate("body.list")
         );
     }
 
