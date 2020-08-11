@@ -18,4 +18,6 @@ public class Endpoint {
     String beanMethod;
 
     Map<String, String> paramsMapping;
+
+    Class<?> requestBodyClass;
 }

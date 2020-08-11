@@ -66,7 +66,7 @@ public class Exposer {
             handlerMapping.registerMapping(
                     mappingInfo,
                     handler,
-                    EndpointHandler.class.getDeclaredMethod("handle", MultiValueMap.class, Map.class)
+                    EndpointHandler.class.getDeclaredMethod("handle", MultiValueMap.class, Map.class, Map.class)
             );
 
             mappings.add(mappingInfo);

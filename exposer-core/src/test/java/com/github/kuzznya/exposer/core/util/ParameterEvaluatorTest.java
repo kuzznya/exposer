@@ -21,8 +21,10 @@ public class ParameterEvaluatorTest {
         params.add("key1", "value2");
         params.add("key2", "value3");
         Map<String, String> pathVars = Map.of("pathVar1", "val1", "pathVar2", "val2");
+        Map<String, Object> body = Map.of("key1", "bodyVal");
 
-        evaluator = new ParameterEvaluator(params, pathVars);
+        evaluator = new ParameterEvaluator();
+        evaluator.setRequestData(params, pathVars, null, body);
     }
 
     @Test
@@ -44,6 +46,11 @@ public class ParameterEvaluatorTest {
         assertEquals(
                 "val2te$t",
                 evaluator.getValue("$(pathVars['pathVar2'])te\\$t")
+        );
+
+        assertEquals(
+                "bodyVal",
+                evaluator.getValue("$(bodyData['key1'])")
         );
     }
 

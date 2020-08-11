@@ -16,7 +16,7 @@ public class ParameterEvaluator {
     private final EvaluationContext evaluationContext;
     private final ExpressionParser expressionParser = new SpelExpressionParser();
 
-    private RequestData requestData;
+    private RequestData<?> requestData;
 
     private final Map<String, Expression> parsedExpressions = new HashMap<>();
 
@@ -26,15 +26,11 @@ public class ParameterEvaluator {
                 .build();
     }
 
-    public ParameterEvaluator(MultiValueMap<String, String> requestParams,
-                              Map<String, String> pathVariables) {
-        this();
-        setRequestData(requestParams, pathVariables);
-    }
-
-    public void setRequestData(MultiValueMap<String, String> requestParams,
-                               Map<String, String> pathVariables) {
-        requestData = new RequestData(requestParams, pathVariables);
+    public <T> void setRequestData(MultiValueMap<String, String> requestParams,
+                               Map<String, String> pathVariables,
+                               T body,
+                               Map<String, Object> bodyData) {
+        requestData = new RequestData<>(requestParams, pathVariables, body, bodyData);
     }
 
     private Object evaluate(String expression) {

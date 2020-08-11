@@ -7,10 +7,7 @@ import org.springframework.core.MethodParameter;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -76,9 +73,10 @@ public class EndpointHandler {
     @ResponseBody
     @ResponseStatus(HttpStatus.OK)
     public Object handle(@RequestParam MultiValueMap<String, String> requestParams,
-                         @PathVariable Map<String, String> pathVariables)
+                         @PathVariable Map<String, String> pathVariables,
+                         @RequestBody(required = false) Map<String, Object> requestBody)
             throws InvocationTargetException, IllegalAccessException {
-        evaluator.setRequestData(requestParams, pathVariables);
+        evaluator.setRequestData(requestParams, pathVariables, null, requestBody);
         if (paramsMapping != null)
             return method.invoke(
                     service,

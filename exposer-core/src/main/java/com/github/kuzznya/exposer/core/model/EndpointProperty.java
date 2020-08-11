@@ -22,7 +22,9 @@ public class EndpointProperty {
 
     private Map<String, String> params;
 
+    private Class<?> requestBodyClass;
+
     public Endpoint getEndpoint(@NonNull String path, String beanName) {
-        return new Endpoint(path, httpMethod, Optional.ofNullable(bean).orElse(beanName), beanMethod, params);
+        return new Endpoint(path, httpMethod, Optional.ofNullable(bean).orElse(beanName), beanMethod, params, requestBodyClass);
     }
 }

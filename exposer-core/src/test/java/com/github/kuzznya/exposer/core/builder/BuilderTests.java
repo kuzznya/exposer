@@ -25,7 +25,8 @@ public class BuilderTests {
                         RequestMethod.DELETE,
                         "testBean",
                         "deleteMethod",
-                        Map.of("value", "?val")
+                        Map.of("value", "?val"),
+                        null
                 )
         );
     }

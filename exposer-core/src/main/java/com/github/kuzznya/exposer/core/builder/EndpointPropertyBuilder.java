@@ -20,6 +20,8 @@ public class EndpointPropertyBuilder<ParentBuilderClass extends RouteBuilder<?>>
 
     private Map<String, String> params;
 
+    private Class<?> requestBodyClass;
+
     public EndpointPropertyBuilder(ParentBuilderClass parentBuilder, RequestMethod httpMethod, String beanMethod) {
         this.parentBuilder = parentBuilder;
         this.httpMethod = httpMethod;
@@ -38,13 +40,19 @@ public class EndpointPropertyBuilder<ParentBuilderClass extends RouteBuilder<?>>
         return this;
     }
 
+    public EndpointPropertyBuilder<ParentBuilderClass> requestBodyClass(Class<?> requestBodyClass) {
+        this.requestBodyClass = requestBodyClass;
+        return this;
+    }
+
     public ParentBuilderClass register() {
         parentBuilder.addEndpoint(
                 new EndpointProperty(
                         httpMethod,
                         Optional.ofNullable(bean).orElse(parentBuilder.getBean()),
                         beanMethod,
-                        params
+                        params,
+                        requestBodyClass
                 )
         );
         return parentBuilder;

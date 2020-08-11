@@ -27,6 +27,9 @@ public class ExposerConfig implements ExposerConfigurer {
                                 .register()
                         .route("/listsize")
                             .endpoint(RequestMethod.GET, "getListSize").register()
+                            .endpoint(RequestMethod.POST, "getListSize")
+                                .param("list", "$(bodyData['list'])")
+                                .register()
                             .add()
                         .add()
                     .configure();
