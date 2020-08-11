@@ -21,6 +21,7 @@ exposer:
           endpoints:
             - http-method: GET
               bean-method: getListSize
+    - path: /join
       endpoints:
         - http-method: GET
           bean-method: joinTwoArgs
@@ -32,3 +33,12 @@ exposer:
           params:
             arg1: $(bodyData['arg1'])
             arg2: $(bodyData['arg2'])
+    - path: joinSer
+      endpoints:
+        - http-method: POST
+          bean-method: joinTwoArgs
+          request-body-class: com.github.kuzznya.exposer.autoconfigure.TestRequestBodyClass
+          params:
+            arg1: $(body.arg1)
+            arg2: $(body.arg2)
+

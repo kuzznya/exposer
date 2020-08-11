@@ -37,7 +37,7 @@ class ExposerApiTests {
                 .andDo(MockMvcResultHandlers.log())
                 .andReturn();
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/test?val=xxxx"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/join?val=xxxx"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("xxxxtst"))
                 .andDo(MockMvcResultHandlers.log())
@@ -45,9 +45,20 @@ class ExposerApiTests {
 
         mockMvc.perform(
                 MockMvcRequestBuilders
-                        .post("/test")
+                        .post("/join")
                 .content(new ObjectMapper().writeValueAsString(Map.of("arg1", "xxxx", "arg2", "tst")))
                 .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().string("xxxxtst"))
+                .andDo(MockMvcResultHandlers.log())
+                .andReturn();
+
+        mockMvc.perform(
+                MockMvcRequestBuilders
+                        .post("/joinSer")
+                        .content(new ObjectMapper().writeValueAsString(Map.of("arg1", "xxxx", "arg2", "tst")))
+                        .contentType(MediaType.APPLICATION_JSON)
         )
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().string("xxxxtst"))
