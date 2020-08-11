@@ -22,11 +22,11 @@ public class ExposerConfig implements ExposerConfigurer {
                     .and()
                     .route("/v2")
                         .endpoint(RequestMethod.GET, "setValue")
-                            .bean("TestService").param("value", "?val")
+                            .bean("TestService").param("value", "params['val']")
                             .register()
                     .and()
                     .endpoint(RequestMethod.GET, "joinTwoArgs")
-                        .param("arg1", "?val").param("arg2", "tst")
+                        .param("arg1", "params['val']").param("arg2", "'tst'")
                         .register()
                     .add()
                 .configure();

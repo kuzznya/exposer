@@ -40,7 +40,7 @@ public class EndpointHandler {
                                    @NonNull Map<String, String> paramsMapping) {
         return parameters.stream()
                 .map(parameter -> {
-                    Object result = evaluator.getValue(paramsMapping.get(parameter.getParameterName()));
+                    Object result = evaluator.evaluate(paramsMapping.get(parameter.getParameterName()));
 
                     if (result instanceof Collection &&
                             !Collection.class.isAssignableFrom(parameter.getParameterType()))

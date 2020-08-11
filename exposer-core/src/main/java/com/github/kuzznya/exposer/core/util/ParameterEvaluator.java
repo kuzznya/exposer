@@ -9,8 +9,6 @@ import org.springframework.util.MultiValueMap;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class ParameterEvaluator {
     private final EvaluationContext evaluationContext;
@@ -33,55 +31,19 @@ public class ParameterEvaluator {
         requestData = new RequestData<>(requestParams, pathVariables, body, bodyData);
     }
 
-    private Object evaluate(String expression) {
-        if (!parsedExpressions.containsKey(expression))
-            parsedExpressions.put(
-                    expression,
-                    expressionParser.parseExpression(expression)
-            );
-
-        return parsedExpressions
-                .get(expression)
-                .getValue(evaluationContext, requestData);
-    }
-
-    public Object getObjectValue(String query) {
-        if (!query.startsWith("$(") || !query.endsWith(")"))
-            throw new EvaluationException();
-
-        return evaluate(query.substring(2, query.length() - 1));
-    }
-
-    public String getStringValue(String query) {
-        query = query.replaceAll("[\\\\][$]", "__DOLLAR_SIGN__");
-
-        Pattern pattern = Pattern.compile("[$]\\(.*\\)");
-        Matcher matcher = pattern.matcher(query);
-
-        while (matcher.find()) {
-            String expression = matcher.group();
-            Object result = evaluate(expression.substring(2, expression.length() - 1));
-            if (!(result instanceof String))
-                throw new EvaluationException("Cannot concat non-String result with String expression");
-
-            query = matcher.replaceFirst((String) result);
-
-            matcher = pattern.matcher(query);
-        }
-
-        return query.replaceAll("__DOLLAR_SIGN__", "\\$");
-    }
-
-    public Object getValue(String query) {
-        query = query.strip();
-
+    public Object evaluate(String expression) {
         try {
-            if (query.matches("[$]\\(.*\\)"))
-                return getObjectValue(query);
-            else
-                return getStringValue(query);
-        } catch (IllegalArgumentException ex) {
-            throw new EvaluationException("Cannot evaluate query: " + query, ex);
+            if (!parsedExpressions.containsKey(expression))
+                parsedExpressions.put(
+                        expression,
+                        expressionParser.parseExpression(expression)
+                );
+
+            return parsedExpressions
+                    .get(expression)
+                    .getValue(evaluationContext, requestData);
+        } catch (Exception ex) {
+            throw new EvaluationException("Cannot evaluate expression: " + expression, ex);
         }
     }
 }
