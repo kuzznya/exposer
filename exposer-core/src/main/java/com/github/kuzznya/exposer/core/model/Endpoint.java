@@ -5,8 +5,6 @@ import lombok.Value;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Value
 public class Endpoint {
@@ -20,11 +18,4 @@ public class Endpoint {
     String beanMethod;
 
     Map<String, String> paramsMapping;
-
-    public Set<String> getRequestParams() {
-        return paramsMapping.values()
-                .stream()
-                .filter(param -> param.startsWith("?"))
-                .map(param -> param.substring(1)).collect(Collectors.toSet());
-    }
 }

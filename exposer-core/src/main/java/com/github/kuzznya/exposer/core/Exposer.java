@@ -61,12 +61,6 @@ public class Exposer {
             RequestMappingInfo mappingInfo = RequestMappingInfo
                     .paths(endpoint.getPath())
                     .methods(endpoint.getHttpMethod())
-//                    .params(
-//                            endpoint.getParamsMapping() != null ?
-//                                    endpoint.getRequestParams().toArray(String[]::new) :
-//                                    Optional.ofNullable(paramsDiscoverer.getParameterNames(serviceMethod))
-//                                            .orElse(new String[0])
-//                    )
                     .build();
 
             handlerMapping.registerMapping(
