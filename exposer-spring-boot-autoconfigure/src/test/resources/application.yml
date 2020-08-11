@@ -16,7 +16,7 @@ exposer:
             - http-method: GET
               bean-method: setValue
               params:
-                value: ?val
+                value: $(params['val'])
         - path: /listsize
           endpoints:
             - http-method: GET
@@ -25,5 +25,5 @@ exposer:
         - http-method: GET
           bean-method: joinTwoArgs
           params:
-            arg1: ?val
+            arg1: $(params['val'])
             arg2: tst
