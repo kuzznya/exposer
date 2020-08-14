@@ -29,7 +29,9 @@ public class ExposerConfiguration {
         ).collect(Collectors.toSet());
     }
 
-    private Set<Endpoint> getEndpoints(RouteProperty routeProperty, @NonNull String parentPath, String beanName) {
+    public static Set<Endpoint> getEndpoints(RouteProperty routeProperty,
+                                              @NonNull String parentPath,
+                                              String beanName) {
         return Stream.concat(
                 constructEndpoints(
                         routeProperty.getEndpoints(),
@@ -49,7 +51,7 @@ public class ExposerConfiguration {
         ).collect(Collectors.toSet());
     }
 
-    private Set<Endpoint> constructEndpoints(Set<EndpointProperty> properties,
+    public static Set<Endpoint> constructEndpoints(Set<EndpointProperty> properties,
                                               @NonNull String parentPath,
                                               String beanName) {
         return properties
