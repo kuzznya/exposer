@@ -13,7 +13,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ParameterEvaluatorTest {
+public class ParameterEvaluatorTests {
 
     private static ParameterEvaluator evaluator;
 
@@ -35,11 +35,25 @@ public class ParameterEvaluatorTest {
     }
 
     @Test
-    public void evaluationTest() {
+    public void paramsEvaluationTest() {
         assertEquals(
                 List.of("value1", "value2"),
                 evaluator.evaluate("params['key1']")
         );
+
+        assertEquals(
+                "value3",
+                evaluator.evaluate("params['key2'][0]")
+        );
+
+        assertThrows(
+                EvaluationException.class,
+                () -> evaluator.evaluate("params['key3'][0]")
+        );
+    }
+
+    @Test
+    public void pathVarsEvaluationTest() {
         assertEquals(
                 "val2",
                 evaluator.evaluate("pathVars['pathVar2']")
@@ -56,10 +70,21 @@ public class ParameterEvaluatorTest {
         );
 
         assertEquals(
+                "default",
+                evaluator.evaluate("pathVars['pathVar3'] ?: 'default'")
+        );
+    }
+
+    @Test
+    public void bodyParamsEvaluationTest() {
+        assertEquals(
                 "bodyVal",
                 evaluator.evaluate("bodyData['key1']")
         );
+    }
 
+    @Test
+    public void deserializedBodyEvaluationTest() {
         assertEquals(
                 List.of(1, 2, 3),
                 evaluator.evaluate("body.list")
