@@ -91,4 +91,12 @@ public class ParameterEvaluatorTests {
         );
     }
 
+    @Test
+    public void evaluateCachedExpression() {
+        assertEquals(
+                evaluator.evaluate("pathVars['pathVar2']"),
+                evaluator.evaluate("pathVars['pathVar2']")
+        );
+    }
+
 }
