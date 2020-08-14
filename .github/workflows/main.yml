@@ -37,7 +37,7 @@ jobs:
     - name: Configure GPG key for publishing
       run: |
         mkdir -p ~/.gnupg
-        printf "$GPG_SIGNING_KEY" | base64 --decode > ~/.gnupg/private.gpg
+        echo '${{ secrets.GPG_SIGNING_KEY }}' | base64 --decode > ~/.gnupg/private.gpg
         gpg --batch --import ~/.gnupg/private.gpg
     - name: Publish exposer-core to Maven Local
       run: >
