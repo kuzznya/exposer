@@ -38,7 +38,7 @@ public class EndpointHandler {
 
     private List<Object> mapParams(Collection<MethodParameter> parameters,
                                    @NonNull Map<String, String> paramsMapping) {
-        return parameters.stream()
+        return parameters.parallelStream()
                 .map(parameter -> {
                     Object result = evaluator.evaluate(paramsMapping.get(parameter.getParameterName()));
 
@@ -55,9 +55,8 @@ public class EndpointHandler {
 
     private List<Object> mapParams(Collection<MethodParameter> parameters,
                                    MultiValueMap<String, String> requestParams) {
-        return parameters.stream()
-                .map(parameter -> (requestParams.get(parameter.getParameterName()).size() == 1 ||
-                                !Collection.class.isAssignableFrom(parameter.getParameterType())) ?
+        return parameters.parallelStream()
+                .map(parameter -> !Collection.class.isAssignableFrom(parameter.getParameterType()) ?
                         requestParams.getFirst(Objects.requireNonNull(parameter.getParameterName())) :
                         requestParams.get(parameter.getParameterName())
                 )
