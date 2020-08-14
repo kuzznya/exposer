@@ -43,7 +43,7 @@ jobs:
       run: >
         ./gradlew exposer-core:publishMavenJavaPublicationToMavenLocalRepository
         -PsonatypeUsername=${{ secrets.SONATYPE_USERNAME }} -PsonatypePassword=${{ secrets.SONATYPE_PASSWORD }}
-        -Psigning.gnupg.keyName=${{ secrets.GPG_KEYNAME }} -Psigning.gnupg.passphrase=${{ secrets.GPG_PASSPHRASE }}
+        -Psigning.gnupg.executable=gpg -Psigning.gnupg.keyName=${{ secrets.GPG_KEYNAME }} -Psigning.gnupg.passphrase=${{ secrets.GPG_PASSPHRASE }}
     - name: Test exposer-spring-boot-autoconfigure
       run: >
         ./gradlew exposer-spring-boot-autoconfigure:test 
