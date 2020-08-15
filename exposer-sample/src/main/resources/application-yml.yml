@@ -1,31 +1,48 @@
 exposer:
-  bean: TestService2
   routes:
     - path: /test
+      bean: TestService
       routes:
         - path: /v1
-          bean: TestService
           endpoints:
             - http-method: GET
               bean-method: getValue
             - http-method: POST
-              bean-method: setValue
+              bean-method: setValue  # Auto request params mapping
         - path: /v2
-          bean: TestService
           endpoints:
-            - http-method: GET
+            - http-method: POST
               bean-method: setValue
               params:
-                value: params['val']
-        - path: /listsize
+                value: params['val']  # Custom request params mapping to method params
+        - path: /v3
+          endpoints:
+            - http-method: POST
+              bean-method: setValue
+              params:
+                value: bodyData['value']  # Body data mapping to method params
+    - path: /users
+      bean: UserService
+      endpoints:
+        - http-method: POST
+          bean-method: createUser
+          request-body-class: com.kuzznya.exposer_sample.model.User
+          # Body deserialization to custom class
+          params:
+            user: body
+        - http-method: GET
+          bean-method: findUserByEmail
+          params:
+            emails: params['email']
+      routes:
+        - path: /{username}
           endpoints:
             - http-method: GET
-              bean-method: getListSize
-      endpoints:
-        - http-method: GET
-          bean-method: joinTwoArgs
-          params:
-            arg1: params['val']
-            arg2: ('tst')
-
+              bean-method: getUser
+              params:
+                username: pathVars['username']
+            - http-method: POST
+              bean-method: deleteUser
+              params:
+                username: pathVars['username']
 
