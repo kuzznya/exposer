@@ -2,6 +2,7 @@ package com.kuzznya.exposer_sample.config;
 
 import com.github.kuzznya.exposer.core.config.ExposerConfiguration;
 import com.github.kuzznya.exposer.core.config.ExposerConfigurer;
+import com.kuzznya.exposer_sample.model.User;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,21 +14,40 @@ public class ExposerConfig implements ExposerConfigurer {
     @Override
     public ExposerConfiguration configureExposer() {
         return ExposerConfiguration.builder()
-                .bean("TestService2")
                 .route("/test")
+                    .bean("TestService")
                     .route("/v1")
-                        .bean("TestService")
                         .endpoint(RequestMethod.GET, "getValue").and()
                         .endpoint(RequestMethod.POST, "setValue").register()
-                    .and()
+                        .and()
                     .route("/v2")
-                        .endpoint(RequestMethod.GET, "setValue")
-                            .bean("TestService").param("value", "params['val']")
+                        .endpoint(RequestMethod.POST, "setValue")
+                            .param("value", "params['val']")
                             .register()
+                        .and()
+                    .route("/v3")
+                        .endpoint(RequestMethod.POST, "setValue")
+                            .param("value", "bodyData['value']")
+                            .register()
+                        .and()
                     .and()
-                    .endpoint(RequestMethod.GET, "joinTwoArgs")
-                        .param("arg1", "params['val']").param("arg2", "'tst'")
+                .route("/users")
+                    .bean("UserService")
+                    .endpoint(RequestMethod.POST, "createUser")
+                        .requestBodyClass(User.class)
+                        .param("user", "body")
+                        .and()
+                    .endpoint(RequestMethod.GET, "findUserByEmail")
+                        .param("emails", "params['email']")
                         .register()
+                    .route("/{username}")
+                        .endpoint(RequestMethod.GET, "getUser")
+                            .param("username", "pathVars['username']")
+                            .and()
+                        .endpoint(RequestMethod.DELETE, "deleteUser")
+                            .param("username", "pathVars['username']")
+                            .register()
+                        .add()
                     .add()
                 .configure();
     }

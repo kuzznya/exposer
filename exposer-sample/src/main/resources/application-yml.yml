@@ -40,8 +40,8 @@ exposer:
             - http-method: GET
               bean-method: getUser
               params:
-                username: pathVars['username']
-            - http-method: POST
+                username: pathVars['username']  # Use path variables as params
+            - http-method: DELETE
               bean-method: deleteUser
               params:
                 username: pathVars['username']
