@@ -1,9 +1,7 @@
 package com.github.kuzznya.exposer.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.kuzznya.exposer.core.util.EvaluationException;
 import com.github.kuzznya.exposer.core.util.ParameterEvaluator;
-import lombok.NonNull;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.http.HttpStatus;
@@ -12,8 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static com.github.kuzznya.exposer.core.util.ParameterMapper.mapParams;
 
 public class EndpointHandler {
     private final Object service;
@@ -34,33 +35,6 @@ public class EndpointHandler {
         this.paramsDiscoverer = paramsDiscoverer;
         this.evaluator = new ParameterEvaluator();
         this.requestBodyClass = requestBodyClass;
-    }
-
-    private List<Object> mapParams(Collection<MethodParameter> parameters,
-                                   @NonNull Map<String, String> paramsMapping) {
-        return parameters.parallelStream()
-                .map(parameter -> {
-                    Object result = evaluator.evaluate(paramsMapping.get(parameter.getParameterName()));
-
-                    if (result instanceof Collection &&
-                            !Collection.class.isAssignableFrom(parameter.getParameterType()))
-                        return ((Collection<?>) result).stream()
-                                .findFirst()
-                                .orElseThrow(EvaluationException::new);
-                    else
-                        return result;
-                })
-                .collect(Collectors.toList());
-    }
-
-    private List<Object> mapParams(Collection<MethodParameter> parameters,
-                                   MultiValueMap<String, String> requestParams) {
-        return parameters.parallelStream()
-                .map(parameter -> !Collection.class.isAssignableFrom(parameter.getParameterType()) ?
-                        requestParams.getFirst(Objects.requireNonNull(parameter.getParameterName())) :
-                        requestParams.get(parameter.getParameterName())
-                )
-                .collect(Collectors.toList());
     }
 
     private List<MethodParameter> getMethodParameters(Method method) {
@@ -91,7 +65,7 @@ public class EndpointHandler {
         if (paramsMapping != null)
             return method.invoke(
                     service,
-                    mapParams(getMethodParameters(method), paramsMapping).toArray()
+                    mapParams(evaluator, getMethodParameters(method), paramsMapping).toArray()
             );
         else
             return method.invoke(
