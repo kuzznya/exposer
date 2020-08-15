@@ -8,7 +8,7 @@ plugins {
 }
 
 group = 'com.github.kuzznya'
-version = project.property('projectVersion')
+version = projectVersion
 sourceCompatibility = 11
 
 configurations {

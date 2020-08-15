@@ -10,7 +10,7 @@ plugins {
 }
 
 group = 'com.github.kuzznya'
-version = project.property('projectVersion')
+version = projectVersion
 sourceCompatibility = 11
 
 configurations {
@@ -31,11 +31,10 @@ dependencyManagement {
 }
 
 dependencies {
-    api(
-            group: 'com.github.kuzznya',
-            name: 'exposer-core',
-            version: project.property('projectVersion')
-    )
+    if (projectVersion.endsWith("-SNAPSHOT"))
+        api project(':exposer-core')
+    else
+        api(group: 'com.github.kuzznya', name: 'exposer-core', version: projectVersion)
 
     api 'org.springframework.boot:spring-boot-starter-web'
 
