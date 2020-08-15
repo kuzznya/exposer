@@ -12,7 +12,9 @@ public class ParameterMapper {
     public static Object mapCollectionResult(MethodParameter parameter, Collection<?> result) throws
             NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         if (Collection.class.isAssignableFrom(parameter.getParameterType()))
-            return parameter.getParameterType().getMethod("copyOf", Collection.class).invoke(null, result);
+            return parameter.getParameterType()
+                    .getMethod("copyOf", Collection.class)
+                    .invoke(null, result);
         else
             return ((Collection<?>) result).stream()
                     .findFirst()
