@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,15 +63,23 @@ public class EndpointHandler {
             evaluator.setRequestData(requestParams, pathVariables,
                     requestBodyData, requestBodyData);
 
-        if (paramsMapping != null)
-            return method.invoke(
-                    service,
-                    mapParams(evaluator, getMethodParameters(method), paramsMapping).toArray()
-            );
+        final Map<String, String> finalParamsMapping;
+        if (paramsMapping == null) {
+            finalParamsMapping = new LinkedHashMap<>();
+
+            for (MethodParameter parameter : getMethodParameters(method))
+                finalParamsMapping.put(
+                        parameter.getParameterName(),
+                        "params['" + parameter.getParameterName() + "'] ?: pathVars['"
+                                + parameter.getParameterName() + "']"
+                );
+        }
         else
-            return method.invoke(
-                    service,
-                    mapParams(getMethodParameters(method), requestParams).toArray()
-            );
+            finalParamsMapping = paramsMapping;
+
+        return method.invoke(
+                service,
+                mapParams(evaluator, getMethodParameters(method), finalParamsMapping).toArray()
+        );
     }
 }
