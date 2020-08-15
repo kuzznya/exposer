@@ -32,19 +32,25 @@ public class ExposerConfiguration {
     public static Set<Endpoint> getEndpoints(RouteProperty routeProperty,
                                               @NonNull String parentPath,
                                               String beanName) {
+        final String routeBean = Optional
+                .ofNullable(routeProperty.getBean())
+                .orElse(beanName);
+
         return Stream.concat(
                 constructEndpoints(
                         routeProperty.getEndpoints(),
                         parentPath,
-                        beanName
+                        routeBean
                 ).stream(),
 
                 routeProperty.getRoutes()
                         .stream()
-                        .map(route -> getEndpoints(
-                                route,
-                                joinPath(parentPath, route.getPath()),
-                                Optional.ofNullable(route.getBean()).orElse(beanName)
+                        .map(subroute ->
+                                getEndpoints(
+                                        subroute,
+                                        joinPath(parentPath, subroute.getPath()),
+                                        Optional.ofNullable(subroute.getBean())
+                                                .orElse(routeBean)
                                 )
                         )
                         .flatMap(Collection::stream)
@@ -56,12 +62,8 @@ public class ExposerConfiguration {
                                               String beanName) {
         return properties
                 .stream()
-                .map(endpointProperty ->
-                        endpointProperty.getEndpoint(
-                                parentPath,
-                                Optional.ofNullable(endpointProperty.getBean()).orElse(beanName)
-                        )
-                ).collect(Collectors.toSet());
+                .map(endpointProperty -> endpointProperty.getEndpoint(parentPath, beanName))
+                .collect(Collectors.toSet());
     }
 
     public static String joinPath(@NonNull String parentPath, @NonNull String childPath) {
