@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ParameterMapper {
+
     public static Object mapCollectionResult(MethodParameter parameter, Collection<?> result) throws
             NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         if (Collection.class.isAssignableFrom(parameter.getParameterType()))
@@ -21,10 +22,10 @@ public class ParameterMapper {
                     .orElse(null);
     }
 
-    public static Object mapSingleResult(MethodParameter parameter, Object result) throws
+    public static Object mapResult(MethodParameter parameter, Object result) throws
             InvocationTargetException, NoSuchMethodException, IllegalAccessException {
         if (result instanceof Collection)
-            throw new IllegalArgumentException("Cannot map collection as a single result");
+            return mapCollectionResult(parameter, (Collection<?>) result);
 
         if (Collection.class.isAssignableFrom(parameter.getParameterType()))
             return mapCollectionResult(parameter, Collections.singletonList(result));
@@ -40,10 +41,7 @@ public class ParameterMapper {
                     Object result = evaluator.evaluate(paramsMapping.get(parameter.getParameterName()));
 
                     try {
-                        if (result instanceof Collection)
-                            return mapCollectionResult(parameter, (Collection<?>) result);
-                        else
-                            return mapSingleResult(parameter, result);
+                        return mapResult(parameter, result);
                     } catch (ReflectiveOperationException ex) {
                         throw new EvaluationException("Cannot handle params mapping", ex);
                     }
